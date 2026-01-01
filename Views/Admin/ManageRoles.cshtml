@@ -1,0 +1,89 @@
+@using QuanLySoTietKiem.Constaints
+@model QuanLySoTietKiem.Models.RoleViewModels.ManageUserRolesViewModel
+@{
+  ViewData["Title"] = "Quản lý quyền người dùng";
+  Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h4 class="m-0 font-weight-bold text-primary">Quản lý quyền cho người dùng: @Model.UserName</h4>
+    </div>
+    <div class="card-body">
+      @if (TempData["SuccessMessage"] != null)
+      {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      }
+
+      @if (TempData["ErrorMessage"] != null)
+      {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      }
+
+      <form asp-action="ManageRoles" method="post">
+        <input type="hidden" asp-for="UserId" />
+        <input type="hidden" asp-for="UserName" />
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-primary">
+              <tr>
+                <th>Quyền</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (int i = 0; i < Model.Roles.Count; i++)
+              {
+                <tr>
+                  <td>
+                    <input type="hidden" asp-for="@Model.Roles[i].RoleId" />
+                    <input type="hidden" asp-for="@Model.Roles[i].RoleName" />
+                    @Model.Roles[i].RoleName
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" asp-for="@Model.Roles[i].IsSelected"
+                        data-role-name="@Model.Roles[i].RoleName" />
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Lưu thay đổi
+          </button>
+          <a asp-action="UserList" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Quay lại
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    // Tự động ẩn thông báo sau 5 giây
+    setTimeout(function () {
+      $('.alert').alert('close');
+    }, 5000);
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('[data-role-name="Admin"]').forEach(function (checkbox) {
+        checkbox.disabled = true;
+      });
+    });
+  </script>
+}

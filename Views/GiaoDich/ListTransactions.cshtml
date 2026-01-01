@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Danh sách giao dịch";
+    var transactions = ViewBag.Transactions as List<QuanLySoTietKiem.Entity.GiaoDich>;
+    var message = ViewBag.Message as string;
+}
+
+<h2>Danh sách giao dịch</h2>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info">@message</div>
+}
+else if (transactions != null && transactions.Count > 0)
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Mã giao dịch</th>
+                <th>Ngày giao dịch</th>
+                <th>Số tiền</th>
+                <th>Loại giao dịch</th>
+                <th>Mô tả</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gd in transactions)
+            {
+                <tr>
+                    <td>@gd.MaGiaoDich</td>
+                    <td>@gd.NgayGiaoDich.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@gd.SoTien.ToString("N0")</td>
+                    <td>@gd.LoaiGiaoDichNavigation?.TenLoaiGiaoDich ?? gd.LoaiGiaoDich</td>
+                    <td>@gd.MoTa</td>
+                    <td>@gd.TrangThai</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">Không có dữ liệu giao dịch.</div>
+}
+
+<a asp-action="Index" class="btn btn-secondary">Quay lại</a>

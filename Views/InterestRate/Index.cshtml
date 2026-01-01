@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<QuanLySoTietKiem.Models.Admin.InterestRate>
+@{
+    ViewData["Title"] = "Interest Rate Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Quản lý lãi suất</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Tên loại sổ</th>
+            <th>Lãi suất</th>
+            <th>Kỳ hạn (tháng)</th>
+            <th>Số tiền tối thiểu gửi</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int idx = 1;
+            foreach (var rate in Model)
+            {
+                <tr>
+                    <td>@idx</td>
+                    <td>@rate.NameOfInterestRate</td>
+                    <td>@rate.Rate</td>
+                    <td>@rate.TermInMonths</td>
+                    <td>@rate.MinimumDepositAmount.ToString("N0") VNĐ</td>
+                    <td>
+                        @Html.ActionLink("Sửa", "EditInterestRate", new { id = rate.Id }) |
+                        @Html.ActionLink("Xóa", "DeleteInterestRate", new { id = rate.Id }, new { onclick = "return confirm('Are you sure you want to delete this interest rate?');" })
+                    </td>
+                </tr>
+                idx++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">
+                    No interest rates found.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

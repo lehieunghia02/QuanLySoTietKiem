@@ -1,0 +1,326 @@
+@model QuanLySoTietKiem.Models.RutTien.WithdrawMoneyViewModel;
+@{
+    ViewData["Title"] = "Withdraw Money";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<style>
+    .card {
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+        }
+
+    .alert {
+        animation: slideIn 0.5s ease-out;
+    }
+
+    .btn {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+    .form-control:focus {
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        border-color: #28a745;
+    }
+
+    .quick-amount {
+        transition: all 0.3s ease;
+        min-width: 150px;
+    }
+
+        .quick-amount:hover {
+            transform: translateY(-2px);
+        }
+
+        .quick-amount.active {
+            background-color: #198754;
+            color: white;
+            border-color: #198754;
+        }
+</style>
+
+<div class="container mt-5 animate__animated animate__fadeIn">
+    <div class="card shadow rounded-lg">
+        <div class="card-header bg-success text-white">
+            <div class="d-flex align-items-center justify-content-between">
+                <i class="bi bi-cash-stack me-2"></i>
+                <div class="d-flex align-items-center flex-grow-1 justify-content-center">
+                    <h3 class="mb-0">Withdraw Money</h3>
+                    <span class="badge rounded-pill ms-2 @(Model.TrangThai ? "bg-success" : "bg-secondary")">
+                        @(Model.TrangThai ? "Active" : "Closed")
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        @if (!Model.TrangThai)
+        {
+            <div class="alert alert-warning m-3 rounded-lg">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Notice:</strong> This savings account has been closed
+            </div>
+        }
+
+        @if (DateTime.Now.Date >= Model.NgayDaoHan.Date)
+        {
+            <a asp-action="XuLyDaoHan" asp-route-maSoTietKiem="@Model.MaSoTietKiem" class="btn btn-primary m-3 d-block">
+                Process Maturity
+            </a>
+        }
+
+        <div class="card-body">
+            <div class="alert alert-info shadow-sm rounded-lg">
+                <h5 class="border-bottom pb-2">Withdrawal Information:</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <div><strong>Savings Account ID:</strong> @Model.MaSoTietKiem</div>
+                            <div class="mt-2">
+                                <strong>Customer Name:</strong>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    @User.Identity.Name
+                                }
+                                else
+                                {
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-sm btn-primary ms-2">
+                                        Log in
+                                    </a>
+                                }
+                            </div>
+                            <div class="mt-2"><strong>Opening Date:</strong> @Model.NgayMoSo.ToString("dd/MM/yyyy")</div>
+                            <div class="mt-2"><strong>Maturity Date:</strong> @Model.NgayDaoHan.ToString("dd/MM/yyyy")</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-white">
+                            <div class="d-flex justify-content-between">
+                                <span>Current Balance</span>
+                                <strong>@Model.SoDuHienTai.ToString("N0") VNĐ</strong>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between">
+                                <span>Term Interest Rate</span>
+                                <strong>@Model.LaiSuatKyHan.ToString("P1")</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span>Applied Interest Rate</span>
+                                <strong>@ViewBag.LaiSuatApDung%/year</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span>Interest Amount</span>
+                                <strong>@ViewBag.TienLai.ToString("N0") VNĐ</strong>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between fs-5 text-success">
+                                <span>Total Receivable</span>
+                                <strong>@ViewBag.TongTienNhanDuoc.ToString("N0") VNĐ</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (DateTime.Now < Model.NgayDaoHan)
+                {
+                    <div class="alert alert-danger border-start border-4 border-danger mt-3 rounded-lg animate__animated animate__headShake">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Warning:</strong> Early withdrawal will be subject to a lower interest rate
+                    </div>
+                }
+            </div>
+
+            @*  @if (Model.TrangThai)
+            {
+                <form asp-action="WithdrawMoney" method="post" class="mt-4">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="maSoTietKiem" />
+
+                    <div class="mb-4">
+                        <label asp-for="SoTienRut" class="form-label fw-bold text-success">
+                            <i class="bi bi-calculator"></i> Withdrawal Amount
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-success text-white">
+                                <i class="bi bi-currency-dollar"></i>
+                            </span>
+                            <input id="displayAmount" class="form-control" placeholder="0" type="text"
+                                   data-max="@ViewBag.TongTienNhanDuoc" />
+                        </div>
+                        <div class="mt-3 d-flex gap-2 flex-wrap">
+                            <button type="button" class="btn btn-outline-success quick-amount" data-amount="100000">
+                                100,000 VNĐ
+                            </button>
+                            <button type="button" class="btn btn-outline-success quick-amount" data-amount="1000000">
+                                1,000,000 VNĐ
+                            </button>
+                            <button type="button" class="btn btn-outline-success quick-amount" data-amount="10000000">
+                                10,000,000 VNĐ
+                            </button>
+                        </div>
+                        <input type="hidden" asp-for="SoTienRut" id="actualAmount" />
+                        <div class="invalid-feedback" id="amountError">
+                            Withdrawal amount must not exceed the current balance
+                        </div>
+                        <div class="invalid-feedback" id="formatError">
+                            Please enter a valid amount
+                        </div>
+                        <span asp-validation-for="SoTienRut" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 d-flex gap-2 justify-content-center">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-cash me-2"></i>Confirm Withdrawal
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-arrow-left me-2"></i>Back
+                        </a>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="mb-3 d-flex gap-2 justify-content-center mt-4">
+                    <a asp-action="DeleteSavingsAccount" asp-route-id="@Model.MaSoTietKiem" method="post"
+                       class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this savings account?')">
+                        <i class="bi bi-trash me-2"></i>Delete Account
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+            } *@
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        const displayInput = document.getElementById('displayAmount');
+        const actualInput = document.getElementById('actualAmount');
+        const submitButton = document.querySelector('button[type="submit"]');
+        const errorDiv = document.getElementById('amountError');
+        const formatErrorDiv = document.getElementById('formatError');
+        const quickAmountButtons = document.querySelectorAll('.quick-amount');
+
+        // Xử lý sự kiện click cho các nút chọn nhanh
+        quickAmountButtons.forEach(button => {
+          button.addEventListener('click', function () {
+            const amount = parseInt(this.dataset.amount);
+            const max = parseInt(displayInput.dataset.max);
+
+            if (amount > max) {
+              displayInput.classList.add('is-invalid');
+              errorDiv.style.display = 'block';
+              formatErrorDiv.style.display = 'none';
+              submitButton.disabled = true;
+              return;
+            }
+
+            // Cập nhật giá trị vào input
+            actualInput.value = amount;
+            displayInput.value = amount.toLocaleString('vi-VN');
+
+            // Reset trạng thái
+            displayInput.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+            formatErrorDiv.style.display = 'none';
+            submitButton.disabled = false;
+
+            // Highlight nút được chọn
+            quickAmountButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+          });
+        });
+
+        displayInput.addEventListener('input', function (e) {
+          // Reset highlight của các nút khi người dùng nhập tay
+          quickAmountButtons.forEach(btn => btn.classList.remove('active'));
+
+          // Xóa tất cả ký tự không phải số
+          let value = this.value.replace(/[^\d]/g, '');
+
+          // Chuyển đổi thành số
+          let number = parseInt(value) || 0;
+
+          // Giới hạn theo giá trị max
+          let max = parseInt(this.dataset.max);
+
+          // Kiểm tra và hiển thị thông báo
+          if (number > max) {
+            this.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            formatErrorDiv.style.display = 'none';
+            submitButton.disabled = true;
+          } else if (number === 0) {
+            this.classList.add('is-invalid');
+            formatErrorDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+            submitButton.disabled = true;
+          } else {
+            this.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+            formatErrorDiv.style.display = 'none';
+            submitButton.disabled = false;
+          }
+
+          // Cập nhật giá trị thực tế (không có dấu phân cách)
+          actualInput.value = number;
+
+          // Định dạng số với dấu phân cách hàng nghìn cho hiển thị
+          this.value = number.toLocaleString('vi-VN');
+        });
+
+        // Xử lý form submit
+        document.querySelector('form').addEventListener('submit', function (e) {
+          let number = parseInt(actualInput.value) || 0;
+          let max = parseInt(displayInput.dataset.max);
+
+          if (number === 0) {
+            e.preventDefault();
+            displayInput.classList.add('is-invalid');
+            formatErrorDiv.style.display = 'block';
+            return false;
+          }
+
+          if (number > max) {
+            e.preventDefault();
+            displayInput.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            formatErrorDiv.style.display = 'none';
+            return false;
+          }
+        });
+    </script>
+}

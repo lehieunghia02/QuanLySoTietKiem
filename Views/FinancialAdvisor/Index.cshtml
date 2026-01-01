@@ -1,0 +1,294 @@
+@{
+    ViewData["Title"] = "Tư vấn tài chính";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <i class="bi bi-robot me-2 fs-4"></i>
+                    <h5 class="mb-0">Trợ lý thông minh</h5>
+                </div>
+                
+                <!-- Khu vực chat -->
+                <div class="card-body chat-area" id="chatArea">
+                    <div class="welcome-message">
+                        <p class="fw-bold"><i class="bi bi-stars me-2"></i>Xin chào! Tôi là trợ lý thông minh. Tôi có thể giúp bạn:</p>
+                        <ul>
+                            <li>Hướng dẫn sử dụng website</li>
+                            <li>Tư vấn về sổ tiết kiệm</li>
+                            <li>Giải đáp thắc mắc về tính năng</li>
+                            <li>Hỗ trợ các vấn đề kỹ thuật</li>
+                        </ul>
+                    </div>
+
+                    <!-- Suggestions -->
+                    <div class="suggestions mt-3">
+                        <div class="suggestions-container">
+                            <div class="suggestions-category">
+                                <h6 class="suggestion-category-title">
+                                    <i class="bi bi-info-circle me-2"></i>Thông tin chung
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Website này có những tính năng gì?
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Làm thế nào để bắt đầu sử dụng?
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="suggestions-category">
+                                <h6 class="suggestion-category-title">
+                                    <i class="bi bi-wallet me-2"></i>Sổ tiết kiệm
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Cách mở sổ tiết kiệm mới?
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Làm sao để theo dõi lãi suất?
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="suggestions-category">
+                                <h6 class="suggestion-category-title">
+                                    <i class="bi bi-credit-card me-2"></i>Nạp/Rút tiền
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Cách nạp tiền qua VNPay?
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Cách rút tiền về tài khoản?
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="suggestions-category">
+                                <h6 class="suggestion-category-title">
+                                    <i class="bi bi-shield-check me-2"></i>Bảo mật
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Cách bảo vệ tài khoản?
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                            onclick="askSuggestion(this)">
+                                        Quên mật khẩu phải làm sao?
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thêm các nút chức năng -->
+                    <div class="chat-actions">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="clearChat()">
+                            <i class="bi bi-trash"></i> Xóa lịch sử
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="exportChat()">
+                            <i class="bi bi-download"></i> Tải lịch sử chat
+                        </button>
+                    </div>
+
+                    <!-- Thêm tính năng đánh giá câu trả lời -->
+                    <div class="message-actions">
+                        <button class="btn btn-sm btn-light" onclick="rateResponse(1)">
+                            <i class="bi bi-hand-thumbs-up"></i>
+                        </button>
+                        <button class="btn btn-sm btn-light" onclick="rateResponse(0)">
+                            <i class="bi bi-hand-thumbs-down"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form nhập tin nhắn -->
+                <div class="card-footer border-top">
+                    <form id="chatForm" class="d-flex gap-2">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-chat-dots"></i>
+                            </span>
+                            <input type="text" id="userInput" class="form-control border-start-0" 
+                                   placeholder="Nhập câu hỏi của bạn..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2" id="sendButton">
+                            <span>Gửi</span>
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/financial-advisor.css" />
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            const chatArea = document.getElementById('chatArea');
+            const chatForm = document.getElementById('chatForm');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+
+            chatForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const question = userInput.value.trim();
+                if (!question) return;
+
+                // Disable input while processing
+                userInput.disabled = true;
+                sendButton.disabled = true;
+
+                // Add user message
+                appendMessage(question, true);
+                userInput.value = '';
+
+                // Show typing indicator
+                showTypingIndicator();
+
+                try {
+                    const response = await fetch('/FinancialAdvisor/GetAdvice', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(question)
+                    });
+
+                    const data = await response.json();
+                    
+                    // Hide typing indicator
+                    hideTypingIndicator();
+
+                    if (data.success) {
+                        appendMessage(data.message, false);
+                    } else {
+                        appendMessage("Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.", false);
+                    }
+                } catch (error) {
+                    hideTypingIndicator();
+                    appendMessage("Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.", false);
+                } finally {
+                    userInput.disabled = false;
+                    sendButton.disabled = false;
+                    userInput.focus();
+                }
+            });
+
+            function appendMessage(content, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+                
+                if (!isUser) {
+                    // Format bot response
+                    const formattedContent = formatBotResponse(content);
+                    messageDiv.innerHTML = formattedContent;
+                } else {
+                    // User message remains simple
+                    const text = document.createElement('p');
+                    text.className = 'mb-0';
+                    text.textContent = content;
+                    messageDiv.appendChild(text);
+                }
+                
+                chatArea.appendChild(messageDiv);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+
+            function formatBotResponse(content) {
+                // Split content by lines or bullet points
+                const lines = content.split(/\n|•/).filter(line => line.trim());
+                
+                // Check if content contains list items
+                const hasListItems = lines.length > 1;
+                
+                if (hasListItems) {
+                    let html = '';
+                    let inList = false;
+                    
+                    lines.forEach(line => {
+                        line = line.trim();
+                        
+                        // Check if line is a title (ends with ':')
+                        if (line.endsWith(':')) {
+                            if (inList) {
+                                html += '</ul>';
+                                inList = false;
+                            }
+                            html += `<div class="list-title">${line}</div>`;
+                            html += '<ul>';
+                            inList = true;
+                        }
+                        // Check if line is a list item
+                        else if (line.startsWith('-') || line.startsWith('*')) {
+                            if (!inList) {
+                                html += '<ul>';
+                                inList = true;
+                            }
+                            html += `<li>${line.substring(1).trim()}</li>`;
+                        }
+                        // Regular text
+                        else {
+                            if (inList) {
+                                html += '</ul>';
+                                inList = false;
+                            }
+                            html += `<p class="mb-2">${line}</p>`;
+                        }
+                    });
+                    
+                    if (inList) {
+                        html += '</ul>';
+                    }
+                    
+                    return html;
+                }
+                
+                // Single line response
+                return `<p class="mb-0">${content}</p>`;
+            }
+
+            function showTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.className = 'typing-indicator';
+                indicator.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+                chatArea.appendChild(indicator);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+
+            function hideTypingIndicator() {
+                const indicator = document.querySelector('.typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+        });
+
+        function askSuggestion(button) {
+            const question = button.textContent.trim();
+            document.getElementById('userInput').value = question;
+            document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+        }
+    </script>
+} 

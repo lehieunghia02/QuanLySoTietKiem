@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Sổ tiết kiệm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/pages/home.css" />
+
+@await Html.PartialAsync("Sections/Home/_HeroSection")
+@await Html.PartialAsync("Sections/Home/_StatsSection")
+@await Html.PartialAsync("Sections/Home/_WhyChooseUsSection")
+@await Html.PartialAsync("Sections/Home/_FeaturesSection")
+@await Html.PartialAsync("Sections/Home/_TestimonialsSection")
+@await Html.PartialAsync("Sections/Home/_CTASection")
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Thêm class cho các phần tử
+            const featureCards = document.querySelectorAll('.feature-card');
+            const statsCards = document.querySelectorAll('.stats-card');
+            const whyChooseUsItems = document.querySelectorAll('.why-choose-item');
+            const testimonialCards = document.querySelectorAll('.testimonial-card');
+
+            featureCards.forEach(card => {
+                card.classList.add('animate-on-scroll');
+            });
+
+            statsCards.forEach(card => {
+                card.classList.add('animate-on-scroll');
+            });
+
+            whyChooseUsItems.forEach(item => {
+                item.classList.add('animate-on-scroll');
+            });
+
+            testimonialCards.forEach(card => {
+                card.classList.add('animate-on-scroll');
+            });
+
+            // Xử lý animation khi scroll
+            const animateElements = document.querySelectorAll('.animate-on-scroll');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animateElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Animation cho số liệu thống kê
+            const statsNumbers = document.querySelectorAll('.stats-number');
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+
+                        // Nếu có thuộc tính data-count
+                        if (target.hasAttribute('data-count')) {
+                            const count = parseFloat(target.getAttribute('data-count'));
+                            let startCount = 0;
+                            const duration = 2000;
+                            const step = 30;
+                            const increment = count / (duration / step);
+
+                            // Nếu là số thập phân
+                            if (Number.isInteger(count) === false) {
+                                const timer = setInterval(() => {
+                                    startCount += increment;
+                                    if (startCount >= count) {
+                                        clearInterval(timer);
+                                        target.textContent = count.toFixed(1) + '%';
+                                    } else {
+                                        target.textContent = startCount.toFixed(1) + '%';
+                                    }
+                                }, step);
+                            } else {
+                                // Nếu là số nguyên
+                                const timer = setInterval(() => {
+                                    startCount += increment;
+                                    if (startCount >= count) {
+                                        clearInterval(timer);
+                                        target.textContent = Math.floor(count).toLocaleString() + '+';
+                                    } else {
+                                        target.textContent = Math.floor(startCount).toLocaleString() + '+';
+                                    }
+                                }, step);
+                            }
+                        }
+
+                        statsObserver.unobserve(target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statsNumbers.forEach(stat => {
+                statsObserver.observe(stat);
+            });
+
+            // Slider cho phần testimonials
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.testimonial-card');
+            const totalSlides = slides.length;
+            const dotsContainer = document.querySelector('.testimonial-dots');
+
+            if (slides.length > 0) {
+                // Tạo dots
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('span');
+                    dot.classList.add('testimonial-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.setAttribute('data-slide', i);
+                    dot.addEventListener('click', () => {
+                        goToSlide(i);
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+
+                // Hiển thị slide đầu tiên
+                showSlide(currentSlide);
+
+                // Auto slide
+                setInterval(() => {
+                    nextSlide();
+                }, 5000);
+
+                // Nút next và prev
+                document.querySelector('.testimonial-next').addEventListener('click', nextSlide);
+                document.querySelector('.testimonial-prev').addEventListener('click', prevSlide);
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.style.display = i === index ? 'block' : 'none';
+                });
+
+                // Cập nhật dots
+                document.querySelectorAll('.testimonial-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                showSlide(currentSlide);
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                showSlide(currentSlide);
+            }
+
+            function goToSlide(index) {
+                currentSlide = index;
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+}

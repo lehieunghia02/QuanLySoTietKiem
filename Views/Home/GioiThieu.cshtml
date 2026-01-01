@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Giới Thiệu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/about.css" />
+}
+
+<!-- Hero Section -->
+@await Html.PartialAsync("Sections/GioiThieu/_HeroSectionPartialView")
+
+<!-- About Section -->
+@await Html.PartialAsync("Sections/GioiThieu/_AboutSectionPartial")
+
+<!-- Features Section -->
+@await Html.PartialAsync("Sections/GioiThieu/_FeaturesSectionPartial")
+
+<!-- Stats Section -->
+@await Html.PartialAsync("Sections/GioiThieu/ThongKeSectionPartial")
+
+<!-- Timeline Section -->
+@await Html.PartialAsync("Sections/GioiThieu/_TimelineSectionPartial")
+
+<!-- Team Section -->
+@await Html.PartialAsync("Sections/GioiThieu/_TeamSectionPartial")
+
+<!-- Contact Section -->
+@await Html.PartialAsync("Sections/GioiThieu/_ContactSectionPartial")
+@section Scripts {
+    <script src="js/GioiThieu/index.js"></script>
+}

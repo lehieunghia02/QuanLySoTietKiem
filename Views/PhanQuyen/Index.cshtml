@@ -1,0 +1,272 @@
+@model IEnumerable<QuanLySoTietKiem.Entity.ApplicationUser>
+@{
+    ViewData["Title"] = "Quản lý phân quyền";
+    @* Layout = "~/Views/Shared/_AdminLayout.cshtml"; *@
+}
+
+<style>
+    .role-badge {
+        transition: all 0.3s ease;
+    }
+
+        .role-badge:hover {
+            transform: translateY(-2px);
+        }
+
+    .user-row {
+        transition: all 0.3s ease;
+    }
+
+        .user-row:hover {
+            background-color: #f8f9fa;
+        }
+
+    .action-button {
+        transition: all 0.3s ease;
+    }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+</style>
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 rounded-3 animate__animated animate__fadeIn">
+        <div class="card-header bg-primary text-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-shield-lock fa-2x me-2"></i>
+                    <span class="h4 mb-0">Quản Lý Phân Quyền Người Dùng</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#helpModal">
+                        <i class="bi bi-question-circle me-2"></i>Hướng dẫn
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tên người dùng</th>
+                            <th>Email</th>
+                            <th>Quyền hiện tại</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr class="user-row">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-person-circle fs-4 me-2"></i>
+                                        <div>
+                                            <div class="fw-bold">@user.UserName</div>
+                                            <small class="text-muted">@user.FullName</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @foreach (var role in ViewBag.UserRoles[user.Id])
+                                    {
+                                        <span class="badge bg-primary role-badge me-1">@role</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.EmailConfirmed)
+                                    {
+                                        <span class="badge bg-success">Đã xác thực</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Chưa xác thực</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-primary btn-sm action-button"
+                                                onclick="showRoleModal('@user.Id', '@user.UserName')" data-bs-toggle="tooltip" title="Phân quyền">
+                                            <i class="bi bi-shield-plus"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm action-button"
+                                                onclick="showRevokeModal('@user.Id', '@user.UserName')" data-bs-toggle="tooltip"
+                                                title="Thu hồi quyền">
+                                            <i class="bi bi-shield-minus"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Phân quyền -->
+<div class="modal fade" id="roleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-shield-plus me-2"></i>
+                    Phân quyền người dùng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addRoleForm" asp-action="AddToRole" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="userId" name="userId" />
+                    <div class="mb-3">
+                        <label class="form-label">Tên người dùng</label>
+                        <input type="text" id="userName" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Chọn quyền</label>
+                        <select name="role" class="form-select" required>
+                            <option value="">-- Chọn quyền --</option>
+                            @foreach (var role in ViewBag.AllRoles)
+                            {
+                                <option value="@role.Name">@role.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-shield-plus me-2"></i>Thêm quyền
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thu hồi quyền -->
+<div class="modal fade" id="revokeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-shield-minus me-2"></i>
+                    Thu hồi quyền người dùng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="revokeRoleForm" asp-action="RemoveFromRole" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="revokeUserId" name="userId" />
+                    <div class="mb-3">
+                        <label class="form-label">Tên người dùng</label>
+                        <input type="text" id="revokeUserName" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Chọn quyền cần thu hồi</label>
+                        <select name="role" class="form-select" required>
+                            <option value="">-- Chọn quyền --</option>
+                            @foreach (var role in ViewBag.AllRoles)
+                            {
+                                <option value="@role.Name">@role.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-shield-minus me-2"></i>Thu hồi quyền
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Hướng dẫn -->
+<div class="modal fade" id="helpModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-question-circle me-2"></i>
+                    Hướng dẫn sử dụng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h6 class="fw-bold"><i class="bi bi-shield-plus me-2"></i>Phân quyền:</h6>
+                    <p>
+                        Click vào nút <span class="badge bg-primary"><i class="bi bi-shield-plus"></i></span> để thêm quyền cho
+                        người dùng
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold"><i class="bi bi-shield-minus me-2"></i>Thu hồi quyền:</h6>
+                    <p>
+                        Click vào nút <span class="badge bg-danger"><i class="bi bi-shield-minus"></i></span> để thu hồi quyền của
+                        người dùng
+                    </p>
+                </div>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Lưu ý: Hãy cẩn thận khi thực hiện các thao tác phân quyền!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Khởi tạo tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        // Hiển thị modal phân quyền
+        function showRoleModal(userId, userName) {
+          document.getElementById('userId').value = userId;
+          document.getElementById('userName').value = userName;
+          new bootstrap.Modal(document.getElementById('roleModal')).show();
+        }
+
+        // Hiển thị modal thu hồi quyền
+        function showRevokeModal(userId, userName) {
+          document.getElementById('revokeUserId').value = userId;
+          document.getElementById('revokeUserName').value = userName;
+          new bootstrap.Modal(document.getElementById('revokeModal')).show();
+        }
+    </script>
+}

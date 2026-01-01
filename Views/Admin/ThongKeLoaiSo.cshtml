@@ -1,0 +1,221 @@
+﻿@model QuanLySoTietKiem.Models.ThongKe.ThongKeLoaiSoViewModel
+@{
+    ViewData["Title"] = "Thống Kê Theo Loại Sổ";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Thống Kê Theo Loại Sổ</h1>
+    <p class="mb-4">Thống kê và phân tích dữ liệu theo từng loại sổ tiết kiệm.</p>
+
+    <!-- Tổng quan -->
+    <div class="row">
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Tổng số sổ đang hoạt động
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TongSoSo</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Tổng giá trị tiền gửi
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@(String.Format("{0:N0}",
+                                ViewBag.TongTienGui)) VNĐ </ div >
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ và Bảng -->
+        <div class="row">
+            <!-- Biểu đồ tròn phân bố số lượng sổ -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Phân bố số lượng sổ theo loại</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-pie pt-4">
+                            <canvas id="soLuongChart"></canvas>
+                        </div>
+                        <hr>
+                        <div class="mt-4 text-center small">
+                            @for (int i = 0; i < Model.TenLoaiSo.Count; i++)
+                            {
+                                <span class="mr-2">
+                                    <i class="fas fa-circle" style="color: @Model.MauSac[i]"></i> @Model.TenLoaiSo[i]
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biểu đồ tròn phân bố tổng tiền gửi -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Phân bố tổng tiền gửi theo loại</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-pie pt-4">
+                            <canvas id="tienGuiChart"></canvas>
+                        </div>
+                        <hr>
+                        <div class="mt-4 text-center small">
+                            @for (int i = 0; i < Model.TenLoaiSo.Count; i++)
+                            {
+                                <span class="mr-2">
+                                    <i class="fas fa-circle" style="color: @Model.MauSac[i]"></i> @Model.TenLoaiSo[i]
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bảng thống kê chi tiết -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Chi tiết theo loại sổ</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Loại sổ</th>
+                                        <th>Số lượng</th>
+                                        <th>Tỷ lệ</th>
+                                        <th>Tổng tiền gửi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.TenLoaiSo.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>@Model.TenLoaiSo[i]</td>
+                                            <td>@Model.SoLuongSo[i]</td>
+                                            <td>@Model.TyLeSoLuong[i]%</td>
+                                            @*<td>@String.Format("{0:N0}", Model.TongTienGui[i]) VNĐ</td>*@
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            // Dữ liệu từ Model
+            var tenLoaiSo = @Html.Raw(Json.Serialize(Model.TenLoaiSo));
+            var soLuongSo = @Html.Raw(Json.Serialize(Model.SoLuongSo));
+            var tongTienGui = @Html.Raw(Json.Serialize(Model.TongTienGui));
+            var mauSac = @Html.Raw(Json.Serialize(Model.MauSac));
+
+            // Biểu đồ phân bố số lượng sổ
+            var ctxSoLuong = document.getElementById("soLuongChart");
+            var soLuongChart = new Chart(ctxSoLuong, {
+                type: 'doughnut',
+                data: {
+                    labels: tenLoaiSo,
+                    datasets: [{
+                        data: soLuongSo,
+                        backgroundColor: mauSac,
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        caretPadding: 10,
+                    },
+                    legend: {
+                        display: false
+                    },
+                    cutoutPercentage: 70,
+                },
+            });
+
+            // Biểu đồ phân bố tổng tiền gửi
+            var ctxTienGui = document.getElementById("tienGuiChart");
+            var tienGuiChart = new Chart(ctxTienGui, {
+                type: 'doughnut',
+                data: {
+                    labels: tenLoaiSo,
+                    datasets: [{
+                        data: tongTienGui,
+                        backgroundColor: mauSac,
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        caretPadding: 10,
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var total = dataset.data.reduce(function (previousValue, currentValue) {
+                                    return previousValue + currentValue;
+                                });
+                                var currentValue = dataset.data[tooltipItem.index];
+                                var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                                var value = currentValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                return value + " VNĐ (" + percentage + "%)";
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    },
+                    cutoutPercentage: 70,
+                },
+            });
+        </script>
+}

@@ -1,0 +1,48 @@
+@model QuanLySoTietKiem.Models.AccountModels.TwoFactorViewModel
+@{
+  ViewData["Title"] = "Xác thực hai yếu tố";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body">
+                    <p class="alert alert-info">
+                        Mã xác thực đã được gửi đến email của bạn.
+                        Vui lòng kiểm tra hộp thư (bao gồm thư rác) và nhập mã xác thực vào bên dưới.
+                    </p>
+
+                    <form asp-action="TwoFactor" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Code" class="form-label"></label>
+                            <input asp-for="Code" class="form-control" autocomplete="off" />
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label"></label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Xác nhận</button>
+                        </div>
+                    </form>
+
+                    <div class="mt-3">
+                        <p>Không nhận được mã? <a asp-action="ResendTwoFactorCode">Gửi lại mã xác thực</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

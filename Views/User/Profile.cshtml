@@ -1,0 +1,94 @@
+﻿@using iTextSharp.text.pdf.qrcode
+@model QuanLySoTietKiem.Entity.ApplicationUser
+@{
+    ViewData["Title"] = "Trang cá nhân";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+@*Link to css*@
+<link rel="stylesheet" href="~/css/user/profile/profile.css">
+
+<div class="container mt-5 animate__animated animate__fadeIn">
+    <div class="row justify-content-center g-4">
+        <div class="col-md-10">
+            <div class="card profile-card shadow-lg">
+                <div class="profile-header text-white">
+                    <div class="d-flex align-items-center"> 
+                        <div class="text-center w-100">
+
+                            @* Avatar với link *@
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-body text-center">
+                                    <h5 class="fw-bold mb-3">Profile Avatar</h5>
+
+                                    <img id="avatarPreview"
+                                         src="@(string.IsNullOrEmpty(Model.AvatarUrl)
+                                                  ? "/images/default-avatar.png"
+                                                  : Model.AvatarUrl)"
+                                         class="rounded-circle border mb-3"
+                                         width="140"
+                                         height="140"
+                                         style="object-fit: cover;"
+                                         alt="User Avatar" />
+
+                                    <form asp-action="UploadAvatar"
+                                          method="post"
+                                          enctype="multipart/form-data"
+                                          class="d-flex flex-column align-items-center gap-2">
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="file"
+                                               name="avatar"
+                                               accept="image/*"
+                                               class="form-control w-75"
+                                               onchange="previewAvatar(this)" />
+
+                                        <button type="submit" class="btn btn-primary mt-2">
+                                            <i class="bi bi-upload me-1"></i> Update Avatar
+                                        </button>
+                                    </form>
+
+                                    <small class="text-muted d-block mt-2">
+                                        JPG, PNG • Max size 5MB
+                                    </small>
+                                </div>
+                            </div>
+                            @* Tên và email *@
+                            <div class="text-center">
+                                <h2 class="mb-2">@Model.FullName</h2>
+                                <p class="mb-0 opacity-75">@Model.Email</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                @* Thông tin cá nhân *@
+                @await Html.PartialAsync("Sections/User/Profile/_UserInfoSection", Model)
+                <div class="card-footer bg-light p-4 text-center">
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="/User/EditProfile" class="btn btn-success btn-lg">
+                            <i class="bi bi-pencil-fill me-2"></i>Chỉnh sửa thông tin
+                        </a>
+                        <a asp-action="Index" asp-controller="User" class="btn btn-outline-secondary btn-lg">
+                            <i class="bi bi-house-fill me-2"></i>Trở về trang chủ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function previewAvatar(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById("avatarPreview").src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+}

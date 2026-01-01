@@ -1,0 +1,482 @@
+﻿@model QuanLySoTietKiem.Models.AccountModels.RegisterModel.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Form đăng ký -->
+<div class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <!-- Thông báo lỗi và thành công -->
+                <!-- #region name -->
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <!-- #endregion -->
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                        <h5 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            An error occurred!
+                        </h5>
+                        <ul class="mb-0">
+                            @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@modelError.ErrorMessage</li>
+                            }
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <div class="card border-0 shadow-lg">
+                    <!-- Card Header -->
+                    <div class="card-header bg-light">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-white p-2 me-3">
+                                <i class="bi bi-person-plus-fill text-primary fs-4"></i>
+                            </div>
+                            <div>
+                                <h2 class="mb-1 fw-bold">Create a New Account</h2>
+                                <p class="mb-0 opacity-75">Fill in your information to get started</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body p-4">
+                        <form asp-action="Register" method="post" class="needs-validation" novalidate>
+                            @Html.AntiForgeryToken()
+                            <!-- Personal Information Section -->
+                            <div class="mb-4">
+                                <h5 class="text-primary mb-3">
+                                    <i class="bi bi-person-badge me-2"></i>Personal Information
+                                </h5>
+                                <div class="row g-3">
+                                    <!-- Username Field -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="UserName" class="form-control"
+                                                   placeholder="Enter username" />
+                                            <label asp-for="UserName">Username</label>
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid username.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Email Field -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="Email" class="form-control" placeholder="Enter email" />
+                                            <label asp-for="Email">Email address</label>
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid email address.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Full Name Field -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="FullName" class="form-control"
+                                                   placeholder="Enter full name" />
+                                            <label asp-for="FullName">Full name</label>
+                                            <span asp-validation-for="FullName" class="text-danger"></span>
+                                            <div class="invalid-feedback">
+                                                Please enter your full name.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone Number Field -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="PhoneNumber" class="form-control"
+                                                   placeholder="Enter phone number" />
+                                            <label asp-for="PhoneNumber">Phone number</label>
+                                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid phone number.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Information Section -->
+                            <div class="mb-4">
+                                <h5 class="text-primary mb-3">
+                                    <i class="bi bi-card-text me-2"></i>Additional Information
+                                </h5>
+                                <div class="row g-3">
+                                    <!-- ID Card Field -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="CCCD" class="form-control" placeholder="Enter national ID" />
+                                            <label asp-for="CCCD">National ID</label>
+                                            <span asp-validation-for="CCCD" class="text-danger"></span>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid national ID.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Address Fields -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="Address" class="form-control" placeholder="Enter your address" />
+                                            <label asp-for="Address">Address</label>
+                                            <span asp-validation-for="Address" class="text-danger"></span>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid address.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Security Section -->
+                            <div class="mb-4">
+                                <h5 class="text-primary mb-3">
+                                    <i class="bi bi-shield-lock me-2"></i>Security
+                                </h5>
+                                <div class="row g-3">
+                                    <!-- Password Field -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="Password" type="password" class="form-control"
+                                                   id="passwordInput" placeholder="Enter password" />
+                                            <label asp-for="Password">Password</label>
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                            <button type="button"
+                                                    class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-decoration-none"
+                                                    onclick="togglePasswordVisibility('passwordInput', 'togglePasswordIcon')"
+                                                    style="z-index: 5;">
+                                                <i class="bi bi-eye-fill" id="togglePasswordIcon"></i>
+                                            </button>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid password.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm Password Field -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="ConfirmPassword" type="password" class="form-control"
+                                                   id="confirmPasswordInput" placeholder="Confirm password" />
+                                            <label asp-for="ConfirmPassword">Confirm password</label>
+                                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                            <button type="button"
+                                                    class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-decoration-none"
+                                                    onclick="togglePasswordVisibility('confirmPasswordInput', 'toggleConfirmPasswordIcon')"
+                                                    style="z-index: 5;">
+                                                <i class="bi bi-eye-fill" id="toggleConfirmPasswordIcon"></i>
+                                            </button>
+                                            <div class="invalid-feedback">
+                                                Password confirmation does not match.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Password Requirements -->
+                            <div class="alert alert-info mb-4">
+                                <h6 class="alert-heading">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    Password requirements:
+                                </h6>
+                                <ul class="mb-0">
+                                    <li>At least 8 characters</li>
+                                    <li>At least one uppercase letter</li>
+                                    <li>At least one lowercase letter</li>
+                                    <li>At least one number</li>
+                                    <li>At least one special character</li>
+                                </ul>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>Back to login
+                                </a>
+                                <button type="submit" class="btn btn-primary px-4 py-2">
+                                    <i class="bi bi-person-plus-fill me-2"></i>Create account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .form-select {
+            padding-top: 1.625rem;
+            padding-bottom: 0.625rem;
+        }
+
+        .form-floating > .form-select {
+            padding-top: 1.625rem;
+            padding-bottom: 0.625rem;
+        }
+
+        .address-warning {
+            font-size: 0.875rem;
+            color: #664d03;
+            background-color: #fff3cd;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Remove gradient/animation/hover effects for Bootstrap basic style */
+
+        /* Custom validation styles */
+        .form-control.is-invalid,
+        .was-validated .form-control:invalid {
+            background-image: none;
+        }
+
+        .form-control.is-valid,
+        .was-validated .form-control:valid {
+            background-image: none;
+        }
+
+        .validation-summary-errors {
+            margin-bottom: 1rem;
+        }
+
+            .validation-summary-errors ul {
+                margin-bottom: 0;
+                padding-left: 1.25rem;
+            }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Show/hide password
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('bi-eye-fill', 'bi-eye-slash-fill');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('bi-eye-slash-fill', 'bi-eye-fill');
+            }
+        }
+
+        // Xử lý API địa chỉ Việt Nam
+        const API_URL = 'https://provinces.open-api.vn/api';
+
+        // Tải danh sách tỉnh/thành phố
+        async function loadProvinces() {
+            try {
+                const response = await fetch(`${API_URL}/p`);
+                if (!response.ok) throw new Error('Failed to fetch provinces');
+                const provinces = await response.json();
+
+                const provinceSelect = document.getElementById('province');
+                provinces.forEach(province => {
+                    const option = new Option(province.name, province.code);
+                    provinceSelect.add(option);
+                });
+            } catch (error) {
+                console.error('Error loading provinces:', error);
+                handleAddressApiError();
+            }
+        }
+
+        // Tải danh sách quận/huyện
+        async function loadDistricts(provinceCode) {
+            try {
+                const response = await fetch(`${API_URL}/p/${provinceCode}?depth=2`);
+                if (!response.ok) throw new Error('Failed to fetch districts');
+                const data = await response.json();
+
+                const districtSelect = document.getElementById('district');
+                const wardSelect = document.getElementById('ward');
+
+                // Reset selections
+                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+
+                // Enable/disable selects
+                districtSelect.disabled = false;
+                wardSelect.disabled = true;
+
+                data.districts.forEach(district => {
+                    const option = new Option(district.name, district.code);
+                    districtSelect.add(option);
+                });
+            } catch (error) {
+                console.error('Error loading districts:', error);
+                handleAddressApiError();
+            }
+        }
+
+        // Tải danh sách phường/xã
+        async function loadWards(districtCode) {
+            try {
+                const response = await fetch(`${API_URL}/d/${districtCode}?depth=2`);
+                if (!response.ok) throw new Error('Failed to fetch wards');
+                const data = await response.json();
+
+                const wardSelect = document.getElementById('ward');
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+                wardSelect.disabled = false;
+
+                data.wards.forEach(ward => {
+                    const option = new Option(ward.name, ward.code);
+                    wardSelect.add(option);
+                });
+            } catch (error) {
+                console.error('Error loading wards:', error);
+                handleAddressApiError();
+            }
+        }
+
+        // Handle address API error
+        function handleAddressApiError() {
+            const addressContainer = document.querySelector('.address-fields');
+            const manualAddressInput = document.createElement('div');
+            manualAddressInput.className = 'form-floating mt-3';
+            manualAddressInput.innerHTML = `
+                                    <input type="text" class="form-control" id="manualAddress" placeholder="Enter full address">
+                                    <label for="manualAddress">Full address</label>
+                                    <div class="text-danger mt-1">
+                                        <small>Unable to load address data. Please enter your address manually.</small>
+                                    </div>
+                                `;
+            addressContainer.appendChild(manualAddressInput);
+            // Disable API-based address fields
+            document.getElementById('province').disabled = true;
+            document.getElementById('district').disabled = true;
+            document.getElementById('ward').disabled = true;
+        }
+
+        // Cập nhật địa chỉ đầy đủ
+        function updateFullAddress() {
+            const province = document.getElementById('province');
+            const district = document.getElementById('district');
+            const ward = document.getElementById('ward');
+            const manualAddress = document.getElementById('manualAddress');
+
+            if (manualAddress && manualAddress.value) {
+                document.getElementById('fullAddress').value = manualAddress.value;
+                return;
+            }
+
+            if (province.selectedIndex > 0 && district.selectedIndex > 0 && ward.selectedIndex > 0) {
+                const wardText = ward.options[ward.selectedIndex].text;
+                const districtText = district.options[district.selectedIndex].text;
+                const provinceText = province.options[province.selectedIndex].text;
+
+                // Rút gọn địa chỉ
+                const cleanWard = wardText.replace(/(Phường|Xã|Thị trấn)\s+/g, '');
+                const cleanDistrict = districtText.replace(/(Quận|Huyện|Thị xã|Thành phố)\s+/g, '');
+                const cleanProvince = provinceText.replace(/(Tỉnh|Thành phố)\s+/g, '');
+
+                let fullAddress = `${cleanWard}, ${cleanDistrict}, ${cleanProvince}`;
+
+                // Kiểm tra độ dài và rút gọn nếu cần
+                if (fullAddress.length > 50) {
+                    const maxPartLength = 15;
+                    const truncateText = (text, maxLength) => {
+                        if (text.length <= maxLength) return text;
+                        return text.substring(0, maxLength - 2) + '..';
+                    };
+
+                    fullAddress = `${truncateText(cleanWard, maxPartLength)}, ${truncateText(cleanDistrict, maxPartLength)}, ${truncateText(cleanProvince, maxPartLength)}`;
+                    document.getElementById('addressWarning').style.display = 'block';
+                } else {
+                    document.getElementById('addressWarning').style.display = 'none';
+                }
+
+                document.getElementById('fullAddress').value = fullAddress;
+            }
+        }
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProvinces();
+
+            // Address change handlers
+            document.getElementById('province').addEventListener('change', (e) => {
+                if (e.target.value) {
+                    loadDistricts(e.target.value);
+                } else {
+                    document.getElementById('district').disabled = true;
+                    document.getElementById('ward').disabled = true;
+                }
+                updateFullAddress();
+            });
+
+            document.getElementById('district').addEventListener('change', (e) => {
+                if (e.target.value) {
+                    loadWards(e.target.value);
+                } else {
+                    document.getElementById('ward').disabled = true;
+                }
+                updateFullAddress();
+            });
+
+            document.getElementById('ward').addEventListener('change', updateFullAddress);
+
+            // Form validation
+            const form = document.querySelector('.needs-validation');
+            form.addEventListener('submit', (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                const fullAddress = document.getElementById('fullAddress').value;
+                if (!fullAddress) {
+                    event.preventDefault();
+                    alert('Please select a complete address');
+                }
+
+                form.classList.add('was-validated');
+            });
+
+            // Auto-hide alerts after 5 seconds
+            setTimeout(() => {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+}

@@ -1,0 +1,121 @@
+
+/* Dropdown styling */
+.dropdown-menu {
+    padding: 0.5rem 0;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    min-width: 200px;
+    margin-top: 10px;
+}
+
+.dropdown-item {
+    padding: 0.7rem 1.5rem;
+    display: flex;
+    align-items: center;
+    color: #495057;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #4361ee;
+    transform: translateX(5px);
+}
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+    opacity: 0.1;
+}
+
+/* Dropdown animation */
+.animate {
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(1rem);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0rem);
+        opacity: 1;
+    }
+}
+
+.slideIn {
+    animation-name: slideIn;
+}
+
+/* Dropdown arrow styling */
+.dropdown-toggle::after {
+    margin-left: 0.5em;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+}
+
+.show .dropdown-toggle::after {
+    transform: rotate(180deg);
+}
+
+/* Hover effect for dropdown button */
+.dropdown:hover .dropdown-toggle {
+    background-color: #3046c9;
+    color: white;
+}
+
+/* Active dropdown styling */
+.dropdown.show .dropdown-toggle {
+    background-color: #3046c9;
+    color: white;
+}
+
+/* Responsive dropdown */
+@media (max-width: 991.98px) {
+    .dropdown-menu {
+        margin-top: 0;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+    }
+
+    .dropdown-item {
+        padding: 0.8rem 1.5rem;
+    }
+
+    .dropdown-item:hover {
+        transform: translateX(0);
+        background-color: #e9ecef;
+    }
+}
+
+/* Custom dropdown indicators */
+.dropdown-item i {
+    width: 20px;
+    text-align: center;
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+/* Hover states for different dropdown items */
+.dropdown-item[asp-action="Register"]:hover {
+    color: #2ec4b6;
+}
+
+.dropdown-item[asp-action="ForgotPassword"]:hover {
+    color: #ff9f1c;
+}
+
+.dropdown-item[asp-action="Index"]:hover {
+    color: #4361ee;
+}
+
+/* Badge for new items */
+.dropdown-item .badge {
+    margin-left: auto;
+    background-color: #2ec4b6;
+    font-weight: 500;
+    font-size: 0.75rem;
+}

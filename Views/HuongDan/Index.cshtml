@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Hướng dẫn sử dụng phần mềm";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/user/huongdan/index.css">
+<link rel="stylesheet" href="~/js/HuongDan/index.js" />
+<div class="guide-container">
+    <div class="container">
+        <div class="guide-header">
+            <h1 class="guide-title"></h1>
+            <p class="guide-subtitle">
+                Tìm hiểu cách sử dụng các tính năng của hệ thống quản lý sổ tiết kiệm để tối ưu hóa trải
+                nghiệm của bạn
+            </p>
+        </div>
+
+        <!-- Tính năng nổi bật -->
+        @*Render section*@
+        @await Html.PartialAsync("Sections/HuongDan/_TinhNangNoiBatPartial")
+
+        <!-- Hướng dẫn chi tiết -->
+        @await Html.PartialAsync("Sections/HuongDan/_HuongDanChiTietPartial")
+        <!-- Hỗ trợ -->
+        @await Html.PartialAsync("Sections/HuongDan/_HoTroPartial")
+    </div>
+</div>

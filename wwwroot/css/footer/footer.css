@@ -1,0 +1,79 @@
+
+  /* Đảm bảo footer luôn nằm dưới cùng */
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container-fluid,
+  .container,
+  main,
+  .content,
+  .body-content,
+  #page-content {
+    flex: 1 0 auto;
+  }
+
+  .footer {
+    position: relative;
+    width: 100%;
+    flex-shrink: 0;
+    margin-top: auto;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #007bff, #00bcd4, #28a745);
+  }
+
+  .footer-links a:hover {
+    padding-left: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .hover-text-primary:hover {
+    color: #007bff !important;
+    transition: all 0.3s ease;
+  }
+
+  .social-links a {
+    transition: all 0.3s ease;
+  }
+
+  .social-links a:hover {
+    transform: translateY(-3px);
+  }
+
+  .text-white-50 {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  /* Đảm bảo có khoảng cách giữa nội dung và footer */
+  main,
+  .content,
+  .body-content,
+  #page-content {
+    padding-bottom: 2rem;
+  }
+
+  /* Đảm bảo footer không đè lên nội dung */
+  @media(max-height: 800px) {
+    .footer {
+      position: relative;
+    }
+  }

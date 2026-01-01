@@ -1,0 +1,44 @@
+﻿@model QuanLySoTietKiem.Models.Admin.InterestRate
+
+@{
+    ViewData["Title"] = "Create Interest Rate";
+}
+
+<h2>Create Interest Rate</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.NameOfInterestRate)
+        @Html.TextBoxFor(m => m.NameOfInterestRate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.NameOfInterestRate)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Rate)
+        @Html.TextBoxFor(m => m.Rate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Rate)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.TermInMonths)
+        @Html.TextBoxFor(m => m.TermInMonths, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.TermInMonths)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.MinimumDepositAmount)
+        @Html.TextBoxFor(m => m.MinimumDepositAmount, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MinimumDepositAmount)
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,74 @@
+@model QuanLySoTietKiem.Models.PaymentResponseModel
+
+@{
+    ViewData["Title"] = "Thanh toán thành công";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <h1 class="display-4 fw-bold text-success mb-4">Thanh Toán Thành Công!</h1>
+                    
+                    <p class="lead mb-4">
+                        Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Giao dịch của bạn đã được xử lý thành công.
+                    </p>
+                    
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6 text-md-end fw-bold">Mã giao dịch:</div>
+                                <div class="col-md-6 text-md-start">@Model.TransactionId</div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6 text-md-end fw-bold">Số tiền:</div>
+                                <div class="col-md-6 text-md-start">@Model.Amount.ToString("N0") VNĐ</div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6 text-md-end fw-bold">Phương thức thanh toán:</div>
+                                <div class="col-md-6 text-md-start">@Model.PaymentMethod</div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6 text-md-end fw-bold">Thời gian:</div>
+                                <div class="col-md-6 text-md-start">@Model.PaymentTime.ToString("dd/MM/yyyy HH:mm:ss")</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 text-md-end fw-bold">Mô tả:</div>
+                                <div class="col-md-6 text-md-start">@Model.Description</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary px-4 py-2">
+                            <i class="fas fa-home me-2"></i>Trang chủ
+                        </a>
+                        <a href="@Url.Action("Index", "NapTien")" class="btn btn-outline-primary px-4 py-2">
+                            <i class="fas fa-credit-card me-2"></i>Nạp tiền khác
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Hiệu ứng confetti khi thanh toán thành công
+        $(document).ready(function() {
+            // Thêm hiệu ứng fade-in cho các phần tử
+            $('.card').addClass('animate__animated animate__fadeIn');
+        });
+    </script>
+}

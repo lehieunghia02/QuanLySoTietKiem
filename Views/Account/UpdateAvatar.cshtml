@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Cập nhật ảnh đại diện";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+@model QuanLySoTietKiem.Models.AccountModels.UpdateAvatarModel.UpdateAvatarModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Cập nhật ảnh đại diện</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateAvatar" asp-controller="Account" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group text-center mb-4">
+                            <img id="preview" src="@User.FindFirst("AvatarUrl")?.Value" class="rounded-circle mb-3"
+                                 style="width: 150px; height: 150px; object-fit: cover;" alt="Avatar Preview" />
+
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="AvatarImage" name="AvatarImage" accept="image/*"
+                                       onchange="previewImage(event)" />
+                                <label class="custom-file-label" for="AvatarImage">Chọn ảnh...</label>
+                                <span asp-validation-for="AvatarImage" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            <a asp-action="Profile" asp-controller="User" class="btn btn-secondary">Quay lại</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            var preview = document.getElementById('preview');
+            preview.src = reader.result;
+          }
+          reader.readAsDataURL(event.target.files[0]);
+
+          // Hiển thị tên file đã chọn
+          var fileName = event.target.files[0].name;
+          var label = event.target.nextElementSibling;
+          label.innerHTML = fileName;
+        }
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

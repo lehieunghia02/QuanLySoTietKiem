@@ -1,0 +1,127 @@
+@{
+  ViewData["Title"] = "Edit Profile";
+  Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+      <div class="card shadow-sm">
+        <h2 class="text-center mt-4">Profile Information</h2>
+        <p class="text-center mb-4">Update your personal information</p>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+          <div class="alert alert-success d-flex align-items-center">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div>@TempData["SuccessMessage"]</div>
+          </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+          <div class="alert alert-danger d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>@TempData["ErrorMessage"]</div>
+          </div>
+        }
+
+        <div class="card-header bg-primary text-white">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-person-badge fa-2x me-3"></i>
+            <div>
+              <h3 class="mb-0">Edit Profile</h3>
+              <small>Update your information to complete your profile</small>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <img src="@Model.AvatarUrl" class="rounded-circle mb-2" width="120" height="120"
+                 onerror="this.src='/images/default-avatar.png'" />
+            <div>
+              <a href="@Url.Action("UpdateAvatar", "Account")" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-camera-fill me-1"></i>Update Avatar
+              </a>
+            </div>
+          </div>
+
+          @using (Html.BeginForm("EditProfile", "User", FormMethod.Post, new { @class = "profile-form" }))
+          {
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person-fill"></i>
+                  </span>
+                  <input type="text" class="form-control" name="FullName" id="FullName"
+                    value="@Model.FullName" placeholder="Full Name" required />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope-fill"></i>
+                  </span>
+                  <input type="email" class="form-control" name="Email" id="Email" value="@Model.Email"
+                    readonly placeholder="Email" />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-geo-alt-fill"></i>
+                  </span>
+                  <input type="text" class="form-control" name="Address" id="Address"
+                    value="@Model.Address" placeholder="Address" />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-telephone-fill"></i>
+                  </span>
+                  <input type="tel" class="form-control" name="PhoneNumber" id="PhoneNumber"
+                    value="@Model.PhoneNumber" placeholder="Phone Number" />
+                </div>
+              </div>
+            </div>
+
+            <input type="hidden" name="AvatarUrl" value="@Model.AvatarUrl" />
+
+            <div class="d-flex justify-content-between mt-4">
+              <a asp-action="Profile" asp-controller="User" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Back
+              </a>
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i>Save Changes
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    // Hiệu ứng khi trang tải xong
+    document.addEventListener('DOMContentLoaded', function () {
+      // Thêm class để kích hoạt animation cho form
+      document.querySelector('.profile-form').classList.add('loaded');
+
+      // Tự động focus vào trường đầu tiên
+      setTimeout(function () {
+        document.getElementById('FullName').focus();
+      }, 500);
+    });
+  </script>
+
+  @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+  }
+}

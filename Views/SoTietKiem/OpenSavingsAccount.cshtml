@@ -1,0 +1,258 @@
+@model QuanLySoTietKiem.Models.SavingAccountModel
+@{
+  ViewData["Title"] = "Open Savings Account";
+  Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+@* Import CSS *@
+<link rel="stylesheet" href="~/css/user/savingaccount/opensavingaccount.css">
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-lg rounded-4 animate__animated animate__fadeIn">
+        <div class="card-header bg-gradient text-white p-4"
+          style="background: linear-gradient(135deg, #0d6efd, #17a2b8, #6f42c1);">
+          <div class="d-flex align-items-center">
+            <div class="rounded-circle bg-white p-3 me-3 pulse">
+              <i class="bi bi-piggy-bank-fill text-primary fs-3"></i>
+            </div>
+            <div>
+              <h2 class="mb-1 fw-bold" style="color: #0d6efd;">Open a New Savings Account</h2>
+              <p class="mb-0 opacity-75" style="color: #000000;">Start your savings journey today</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body p-4">
+          <!-- Progress indicator -->
+          <div class="progress-indicator mb-4">
+            <div class="progress-step active">
+              <div class="step-icon">1</div>
+              <div class="step-text">Information</div>
+            </div>
+            <div class="progress-step">
+              <div class="step-icon">2</div>
+              <div class="step-text">Confirmation</div>
+            </div>
+            <div class="progress-step">
+              <div class="step-icon">3</div>
+              <div class="step-text">Completed</div>
+            </div>
+          </div>
+
+          <div class="alert alert-primary shadow-sm mb-4"
+            style="background: linear-gradient(to right, #e3f2fd, #bbdefb);">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-primary p-2 me-3 text-white">
+                <i class="bi bi-info-circle-fill"></i>
+              </div>
+              <div>
+                <span class="fw-bold">Current balance:</span>
+                <span class="fs-5 ms-2 text-primary">@ViewBag.SoDuHienTai.ToString("N0") VNĐ</span>
+              </div>
+            </div>
+          </div>
+
+          <form asp-action="OpenSavingsAccount" method="post" class="needs-validation" novalidate>
+            @Html.AntiForgeryToken()
+
+            <!-- Số tiền gửi section -->
+            <div class="amount-section mb-4">
+              <h4 class="section-title mb-3">
+                <i class="bi bi-cash-stack me-2"></i> Deposit Amount
+              </h4>
+              <div class="input-group mb-3">
+                <span class="input-group-text">
+                  <i class="bi bi-currency-dollar"></i>
+                </span>
+                <input class="form-control form-control-lg" type="text" id="displayAmount"
+                  placeholder="Enter the amount you want to deposit (minimum 1,000,000 VND)" />
+                <input type="hidden" asp-for="SoTienGui" id="actualAmount" />
+              </div>
+              <div class="invalid-feedback">
+                Please enter a valid amount (minimum 1,000,000 VND)
+              </div>
+
+              <div class="mt-3 d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="1000000">
+                  1,000,000 VND
+                </button>
+                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="5000000">
+                  5,000,000 VND
+                </button>
+                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="10000000">
+                  10,000,000 VND
+                </button>
+                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="20000000">
+                  20,000,000 VND
+                </button>
+                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="50000000">
+                  50,000,000 VND
+                </button>
+              </div>
+              <span asp-validation-for="SoTienGui" class="text-danger"></span>
+
+              <div class="form-text mt-3">
+                <i class="bi bi-info-circle me-1"></i>
+                The minimum deposit amount is 1,000,000 VND. The deposit amount must not exceed your current balance.
+              </div>
+            </div>
+
+            <!-- Mã sổ section -->
+            <div class="account-section mb-4">
+              <h4 class="section-title mb-3">
+                <i class="bi bi-code-slash me-2"></i>Account Information
+              </h4>
+              <div class="mb-3">
+                <label asp-for="Code" class="form-label">
+                  <i class="bi bi-upc-scan text-info"></i>Savings Account Code
+                </label>
+                <input asp-for="Code" class="form-control bg-light" type="text" value="@ViewBag.CodeSTK" readonly />
+                <div class="form-text">
+                  <i class="bi bi-shield-check me-1"></i>
+                  The account code is automatically generated by the system to ensure uniqueness
+                </div>
+              </div>
+            </div>
+
+            <!-- Loại sổ section -->
+            <div class="term-section mb-4">
+              <h4 class="section-title mb-3">
+                <i class="bi bi-calendar-event me-2"></i>Term and Interest Rate
+              </h4>
+              <div class="mb-3">
+                <label asp-for="MaLoaiSo" class="form-label">
+                  <i class="bi bi-graph-up-arrow text-success"></i>Savings Account Type
+                </label>
+                <select asp-for="MaLoaiSo" class="form-select shadow-sm">
+                  @foreach (var item in (SelectList)ViewBag.LoaiSoTietKiemOptions)
+                  {
+                    if (item.Text != "Không kỳ hạn")
+                    {
+                      <option value="@item.Value">@item.Text</option>
+                    }
+                  }
+                </select>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Choose a term that fits your financial plan
+                </div>
+                <span asp-validation-for="MaLoaiSo" class="text-danger"></span>
+              </div>
+            </div>
+
+            <!-- Hình thức đến hạn section -->
+            <div class="maturity-section mb-4">
+              <h4 class="section-title mb-3">
+                <i class="bi bi-calendar-check me-2"></i>Maturity Option
+              </h4>
+              <div class="mb-3">
+                <label asp-for="MaHinhThucDenHan" class="form-label">
+                  <i class="bi bi-arrow-repeat text-purple"></i>Maturity Option
+                </label>
+                <select asp-for="MaHinhThucDenHan" class="form-select shadow-sm"
+                  asp-items="ViewBag.HinhThucDenHanOptions">
+                </select>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Choose how the savings account will be handled at maturity
+                </div>
+                <span asp-validation-for="MaHinhThucDenHan" class="text-danger"></span>
+              </div>
+            </div>
+
+            <div class="text-center mt-5">
+              <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                <i class="bi bi-save me-2"></i>Open Savings Account
+              </button>
+              <a asp-action="Index" class="btn btn-outline-secondary btn-lg ms-3">
+                <i class="bi bi-arrow-left me-2"></i>Back
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+
+  <script>
+    $(document).ready(function () {
+      const displayInput = $('#displayAmount');
+      const actualInput = $('#actualAmount');
+      const quickAmountButtons = $('.quick-amount');
+      const submitButton = $('button[type="submit"]');
+      const minAmount = 1000000;
+
+      // Hàm chuyển đổi chuỗi tiền thành số nguyên
+      function parseMoneyToInt(value) {
+        return parseInt(value.replace(/[^\d]/g, '')) || 0;
+      }
+
+      // Hàm kiểm tra số tiền hợp lệ
+      function validateAmount(amount) {
+        if (isNaN(amount) || amount < minAmount) {
+          displayInput.addClass('is-invalid');
+          submitButton.prop('disabled', true);
+          return false;
+        }
+        displayInput.removeClass('is-invalid');
+        submitButton.prop('disabled', false);
+        return true;
+      }
+
+      // Xử lý khi nhập số tiền
+      displayInput.on('input', function () {
+        // Xóa tất cả ký tự không phải số
+        let value = this.value.replace(/[^\d]/g, '');
+        // Chuyển thành số
+        let number = parseInt(value) || 0;
+
+        // Cập nhật giá trị thực (không có dấu phân cách) vào hidden input
+        actualInput.val(number);
+
+        // Format hiển thị với dấu phân cách
+        this.value = number.toLocaleString('en-US');
+
+        // Validate
+        validateAmount(number);
+      });
+
+      // Xử lý nút chọn nhanh
+      quickAmountButtons.click(function () {
+        const amount = parseInt($(this).data('amount'));
+        if (validateAmount(amount)) {
+          displayInput.val(amount.toLocaleString('en-US'));
+          actualInput.val(amount);
+          quickAmountButtons.removeClass('active');
+          $(this).addClass('active');
+        }
+      });
+
+      // Validate form trước khi submit
+      $('form').on('submit', function (e) {
+        const amount = parseInt(actualInput.val()) || 0;
+        if (!validateAmount(amount)) {
+          e.preventDefault();
+          displayInput.focus();
+          return false;
+        }
+        return true;
+      });
+
+      // Select2 cho các dropdown
+      $('#MaHinhThucDenHan, #MaLoaiSo').select2({
+        theme: 'bootstrap',
+        width: '100%'
+      });
+
+      // Hiệu ứng khi trang tải xong
+      setTimeout(function () {
+        $('.progress-step:first-child').addClass('completed');
+      }, 1000);
+    });
+  </script>
+}

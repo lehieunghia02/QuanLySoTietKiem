@@ -1,0 +1,96 @@
+﻿@model QuanLySoTietKiem.Models.AccountModels.LoginModel.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/auth/login.css">
+
+<div class="login-page">
+    <div class="container login-container">
+        <div class="login-card">
+            <div class="row g-0">
+                <div class="col-lg-6">
+                    <div class="login-header d-lg-none">
+                        <h2>Login</h2>
+                    </div>
+                    <div class="login-body">
+                        <h3 class="mb-4 d-none d-lg-block">Welcome back!</h3>
+                        <p class="text-muted mb-4 d-none d-lg-block">Please log in to access your account</p>
+                        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <label class="form-label">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Enter your username" })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter your password", id = "password" })
+                                    <span class="input-group-text password-toggle" onclick="togglePasswordVisibility()">
+                                        <i class="bi bi-eye-fill" id="togglePasswordIcon"></i>
+                                    </span>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                            
+                            <div class="form-check mb-4">
+                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                                @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+                            </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-login w-100">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                                </button>
+                            </div>
+                            
+                            @* <div class="text-center my-4"> *@
+                            @*     <span class="text-muted">Or log in with</span> *@
+                            @* </div> *@
+                            @* *@
+                            @* <div class="form-group"> *@
+                            @*     <a href="@Url.Action("GoogleLogin", "Account")" class="btn btn-outline-danger w-100"> *@
+                            @*         <i class="bi bi-google me-2"></i> Sign in with Google *@
+                            @*     </a> *@
+                            @* </div> *@
+                            
+                            <div class="login-links">
+                                <a asp-action="ForgotPassword" asp-controller="Account" class="login-link">
+                                    <i class="bi bi-key-fill me-1"></i> Forgot password?
+                                </a>
+                                <a asp-action="Register" asp-controller="Account" class="login-link">
+                                    <i class="bi bi-person-plus-fill me-1"></i> Create an account
+                                </a>
+                            </div>
+                            
+                            <div class="text-danger mt-4">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="login-image">
+                        <div class="login-image-overlay">
+                            <h3 class="login-image-title">Savings Account Management</h3>
+                            <p class="login-image-text">An efficient, secure, and convenient financial management solution. Optimize returns from your savings.</p>
+                            <img src="~/images/logo.png" alt="Logo" class="img-fluid" style="max-width: 150px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Auth/Login.js"></script>
+}       

@@ -1,0 +1,62 @@
+@model QuanLySoTietKiem.Models.SavingsAccount.AddMoneyViewModel
+@{
+    ViewData["Title"] = "Nạp tiền vào sổ tiết kiệm";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-plus-circle fa-2x me-2"></i>
+                <h3 class="mb-0">Nạp Tiền Vào Sổ Tiết Kiệm</h3>
+            </div>
+        </div>
+
+        <!--Thông báo-->
+        <div class="alert alert-info">
+            <div class="d-flex">
+                <i class="bi bi-info-circle me-2"></i>
+                <p class="mb-0 fw-bold">
+                    Mã sổ tiết kiệm: @ViewBag.CodeSTK
+                </p>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="AddMoney" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="MaSoTietKiem" />
+                <div class="mb-3">
+                    <label asp-for="SoDuHienTai" class="form-label fw-bold text-primary">
+                        <i class="bi bi-wallet2 me-2"></i>Số dư sổ tiết kiệm
+                    </label>
+                    <input asp-for="SoDuHienTai" class="form-control" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SoTienGui" class="form-label fw-bold">
+
+                    </label>
+                    <input asp-for="SoTienGui" class="form-control" />
+                    <span asp-validation-for="SoTienGui" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-2"></i>Xác nhận nạp tiền
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

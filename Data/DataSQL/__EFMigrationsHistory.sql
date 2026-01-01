@@ -1,0 +1,11 @@
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241225160151_InitialDatabase', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241225171714_addColSoLuongMo-BaoCaoThang', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241225174657_addTableHinhThucDenHanandSeedData', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241225181807_Nghia123', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241226055537_Nghia12345', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241226060525_Nghia123456', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241227043919_AddFiledNgayDaoHanToSoTietKiemEntity', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241227161105_AddGiaoDichAndLoaiGiaoDichTable', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241227162103_RemovePhieuGuiTienAndPhieuRutTien', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241227164459_SeedDataLoaiGiaoDich', N'9.0.0');
+INSERT INTO QuanLySoTietKiemDB.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20241228074440_Modifydecimal', N'9.0.0');

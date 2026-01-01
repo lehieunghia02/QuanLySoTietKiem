@@ -1,0 +1,63 @@
+﻿@model QuanLySoTietKiem.Models.AccountModels.TwoFactorRecoveryCodesViewModel
+@{
+    ViewData["Title"] = "Mã dự phòng";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+
+    <div class="alert alert-warning">
+        <p>
+            <strong>Lưu các mã này ở nơi an toàn.</strong>
+        </p>
+        <p>
+            Nếu bạn mất thiết bị và không có mã dự phòng, bạn sẽ mất quyền truy cập vào tài khoản của mình.
+        </p>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Mã dự phòng của bạn</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="bg-light p-3 rounded mb-3">
+                        @for (var i = 0; i < Model.RecoveryCodes.Count; i++)
+                        {
+                            <div class="mb-2">
+                                <code class="h5">@Model.RecoveryCodes[i]</code>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" onclick="printCodes()">In mã dự phòng</button>
+                        <a asp-action="Setup" class="btn btn-secondary">Quay lại</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function printCodes() {
+            var content = document.querySelector('.bg-light').innerHTML;
+            var printWindow = window.open('', '', 'height=500,width=800');
+            printWindow.document.write('<html><head><title>Mã dự phòng xác thực hai yếu tố</title>');
+            printWindow.document.write('<style>body { font-family: Arial, sans-serif; padding: 20px; } code { display: block; padding: 10px; margin: 10px 0; font-size: 16px; font-weight: bold; }</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<h2>Mã dự phòng xác thực hai yếu tố</h2>');
+            printWindow.document.write('<p>Lưu giữ các mã này ở nơi an toàn:</p>');
+            printWindow.document.write(content);
+            printWindow.document.write('</body></html>');
+
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        }
+    </script>
+}

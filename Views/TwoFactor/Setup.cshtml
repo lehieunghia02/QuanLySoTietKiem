@@ -1,0 +1,90 @@
+﻿@model QuanLySoTietKiem.Models.AccountModels.TwoFactorSetupViewModel
+@{
+    ViewData["Title"] = "Cài đặt xác thực hai yếu tố";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["StatusMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Trạng thái xác thực hai yếu tố</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.IsEnabled)
+                    {
+                        <p class="text-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Xác thực hai yếu tố đã được bật
+                        </p>
+                        <form asp-action="EnableDisable" method="post">
+                            <input type="hidden" name="enable" value="false" />
+                            <button type="submit" class="btn btn-danger">Tắt xác thực hai yếu tố</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="text-warning">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Xác thực hai yếu tố chưa được bật
+                        </p>
+                        <form asp-action="EnableDisable" method="post">
+                            <input type="hidden" name="enable" value="true" />
+                            <button type="submit" class="btn btn-success">Bật xác thực hai yếu tố</button>
+                        </form>
+                    }
+                </div>
+            </div>
+
+            @if (Model.IsEnabled)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Mã dự phòng</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            Mã dự phòng có thể được sử dụng để đăng nhập khi bạn không thể truy cập vào thiết bị nhận mã xác thực.
+                        </p>
+                        <a asp-action="GenerateRecoveryCodes" class="btn btn-primary">Tạo mã dự phòng mới</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Thông tin</h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Xác thực hai yếu tố là một lớp bảo mật bổ sung để bảo vệ tài khoản của bạn.
+                        Khi bật tính năng này, bạn sẽ cần cung cấp mã xác thực được gửi qua email mỗi khi đăng nhập.
+                    </p>
+                    <p>
+                        Bạn nên tạo mã dự phòng để sử dụng trong trường hợp không thể truy cập vào email.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

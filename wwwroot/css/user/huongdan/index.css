@@ -1,0 +1,264 @@
+﻿@keyframes fadeIn
+ {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+@keyframes slideInUp
+ {
+     from {
+         transform: translateY(30px);
+         opacity: 0;
+     }
+
+     to {
+         transform: translateY(0);
+         opacity: 1;
+     }
+ }
+
+@keyframes pulse {
+     0% {
+         transform: scale(1);
+     }
+
+     50% {
+         transform: scale(1.03);
+     }
+
+     100% {
+         transform: scale(1);
+     }
+ }
+
+/* Base styles */
+.guide-container {
+    animation: fadeIn 0.8s ease-out;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+}
+
+.guide-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.guide-title {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.guide-title:after {
+    content: '';
+    position: absolute;
+    width: 70%;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    bottom: -10px;
+    left: 15%;
+    border-radius: 2px;
+}
+
+.guide-subtitle {
+    color: #7f8c8d;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.guide-card {
+    border-radius: 15px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    margin-bottom: 2rem;
+    animation: slideInUp 0.5s ease-out;
+    animation-fill-mode: both;
+}
+
+.guide-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.guide-card-header {
+    padding: 1.5rem;
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+.guide-card-body {
+    padding: 2rem;
+    background-color: white;
+}
+
+.guide-section {
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    border-left: 4px solid;
+    transition: all 0.3s ease;
+}
+
+.guide-section:hover {
+    transform: translateX(5px);
+}
+
+.guide-section-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.guide-section-title i {
+    margin-right: 0.8rem;
+    font-size: 1.5rem;
+}
+
+.guide-list {
+    list-style-type: none;
+    padding-left: 2.5rem;
+}
+
+.guide-list li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 1.5rem;
+    font-size: 1.05rem;
+}
+
+.guide-list li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+/* Color schemes */
+.account-section {
+    border-left-color: #3498db;
+}
+
+.account-section .guide-section-title {
+    color: #3498db;
+}
+
+.account-section .guide-list li:before {
+    background-color: #3498db;
+}
+
+.account-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.stats-section {
+    border-left-color: #2ecc71;
+}
+
+.stats-section .guide-section-title {
+    color: #2ecc71;
+}
+
+.stats-section .guide-list li:before {
+    background-color: #2ecc71;
+}
+
+.stats-header {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.profile-section {
+    border-left-color: #e74c3c;
+}
+
+.profile-section .guide-section-title {
+    color: #e74c3c;
+}
+
+.profile-section .guide-list li:before {
+    background-color: #e74c3c;
+}
+
+.profile-header {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: white;
+    font-size: 1.5rem;
+    animation: pulse 2s infinite;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.feature-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.feature-text {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+}
+
+.icon-blue {
+    background-color: #3498db;
+}
+
+.icon-green {
+    background-color: #2ecc71;
+}
+
+.icon-red {
+    background-color: #e74c3c;
+}
+
+.icon-purple {
+    background-color: #9b59b6;
+}
+
+.icon-orange {
+    background-color: #f39c12;
+}
+
+.icon-teal {
+    background-color: #1abc9c;
+}

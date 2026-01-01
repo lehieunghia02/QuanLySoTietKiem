@@ -1,0 +1,296 @@
+@model QuanLySoTietKiem.Models.LaiSuatDuKien.LaiSuatDuKienModel
+@{
+    ViewData["Title"] = "Estimated Interest Calculator";
+}
+
+<div class="calculator-page py-5">
+    <div class="container">
+        <!-- Page Title -->
+        <div class="hero-section text-center mb-5">
+            <h1 class="display-5 fw-bold mb-3">Savings Interest Calculator</h1>
+            <p class="lead">Calculate estimated savings interest and plan your future finances with this simple tool.</p>
+        </div>
+
+        <div class="row justify-content-center g-4">
+            <!-- Calculator Card -->
+            <div class="col-12 col-md-6">
+                <div class="card border-0 shadow-lg rounded-4 mb-4 mb-md-0">
+                    <div class="card-header border-0 bg-gradient text-white p-4" style="background: linear-gradient(45deg, #007bff, #00bcd4);">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-white p-2 me-3">
+                                <i class="bi bi-calculator text-primary fs-4"></i>
+                            </div>
+                            <h3 class="card-title mb-0 fw-bold">Interest Calculation</h3>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <form asp-action="TinhLaiSuat" method="post" class="needs-validation">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                            <div class="form-group mb-4">
+                                <label asp-for="SoTienGui" class="form-label fw-bold">
+                                    <i class="bi bi-cash-stack me-2 text-primary"></i>Deposit Amount
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <input asp-for="SoTienGui" class="form-control money-input" placeholder="Enter amount" />
+                                    <span class="input-group-text bg-light fw-bold">VNĐ</span>
+                                </div>
+                                <span asp-validation-for="SoTienGui" class="text-danger"></span>
+                                <div class="form-text">Enter the amount you want to deposit</div>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label asp-for="KyHan" class="form-label fw-bold">
+                                    <i class="bi bi-calendar-event me-2 text-primary"></i>Term
+                                </label>
+                                <select asp-for="KyHan" asp-items="ViewBag.KyHanOptions" class="form-select form-select-lg">
+                                    <option value="">-- Select term --</option>
+                                </select>
+                                <span asp-validation-for="KyHan" class="text-danger"></span>
+                                <div class="form-text">Select the deposit term in months</div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-calculator-fill me-2"></i>Calculate Interest
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Card -->
+            <div class="col-12 col-md-6">
+                @if (Model.TienLaiDuKien > 0)
+                {
+                    <div class="card border-0 shadow-lg rounded-4 h-100">
+                        <div class="card-header border-0 bg-gradient text-white p-4" style="background: linear-gradient(45deg, #28a745, #20c997);">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-white p-2 me-3">
+                                    <i class="bi bi-graph-up-arrow text-success fs-4"></i>
+                                </div>
+                                <h3 class="card-title mb-0 fw-bold">Calculation Result</h3>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="result-summary mb-4 text-center">
+                                <h4 class="text-success mb-2">Total Amount Received</h4>
+                                <h2 class="display-5 fw-bold text-success mb-0">@Model.TongTienDuKien.ToString("N0") VNĐ</h2>
+                                <p class="text-muted">Including principal and interest</p>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-bold text-muted">Deposit Amount:</td>
+                                            <td class="text-end fw-bold">@Model.SoTienGui.ToString("N0") VNĐ</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-muted">Term:</td>
+                                            <td class="text-end fw-bold">@Model.KyHan tháng</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-muted">Applied Interest Rate:</td>
+                                            <td class="text-end fw-bold">@Model.LaiSuatDuKien.ToString("N2")%/năm</td>
+                                        </tr>
+                                        <tr class="border-top">
+                                            <td class="fw-bold text-success">Estimated Interest:</td>
+                                            <td class="text-end fw-bold text-success">+ @Model.TienLaiDuKien.ToString("N0") VNĐ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="interest-visualization mt-4">
+                                <div class="progress" style="height: 30px; border-radius: 0.75rem; overflow: hidden;">
+                                    <div class="progress-bar bg-primary" role="progressbar" 
+                                         style="width: @(Model.SoTienGui * 100 / Model.TongTienDuKien)%;" 
+                                         aria-valuenow="@(Model.SoTienGui * 100 / Model.TongTienDuKien)" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        Principal
+                                    </div>
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         style="width: @(Model.TienLaiDuKien * 100 / Model.TongTienDuKien)%;" 
+                                         aria-valuenow="@(Model.TienLaiDuKien * 100 / Model.TongTienDuKien)" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        Interest
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <small class="text-muted fw-semibold">Principal: @((Model.SoTienGui * 100 / Model.TongTienDuKien).ToString("N1"))%</small>
+                                    <small class="text-muted fw-semibold">Interest: @((Model.TienLaiDuKien * 100 / Model.TongTienDuKien).ToString("N1"))%</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-light p-3 border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted"><i class="bi bi-info-circle me-2"></i>Results are for reference only</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-printer me-1"></i>Print Result
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card border-0 shadow-lg rounded-4 h-100">
+                        <div class="card-body p-5 d-flex flex-column justify-content-center align-items-center text-center">
+                            <div class="mb-4">
+                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 5rem;"></i>
+                            </div>
+                            <h3 class="mb-3">View Interest Forecast</h3>
+                            <p class="text-muted mb-4">Enter the deposit amount and term on the left to calculate the estimated interest and total amount received.</p>
+                            <div class="features">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="feature-icon bg-primary bg-opacity-10 p-2 rounded-circle me-3">
+                                        <i class="bi bi-check-circle text-primary"></i>
+                                    </div>
+                                    <span>Accurate interest calculation</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="feature-icon bg-primary bg-opacity-10 p-2 rounded-circle me-3">
+                                        <i class="bi bi-check-circle text-primary"></i>
+                                    </div>
+                                    <span>Clear financial visualization</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="feature-icon bg-primary bg-opacity-10 p-2 rounded-circle me-3">
+                                        <i class="bi bi-check-circle text-primary"></i>
+                                    </div>
+                                    <span>Up-to-date interest rates</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="row mt-5">
+            <div class="col-lg-10 mx-auto">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h4 class="mb-4"><i class="bi bi-info-circle-fill me-2 text-primary"></i>How Interest Is Calculated</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="fw-bold">Our calculation method</h5>
+                                <p>Interest is calculated based on the deposit amount, term, and applied interest rate. We use the following formula:</p>
+                                <p><strong>Interest = Principal × Interest Rate × (Term / 12)</strong></p>
+                                <p>Where Interest Rate is annual, and Term is in months.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="fw-bold">Terms and Conditions</h5>
+                                <ul class="mb-0">
+                                    <li>Interest rates may change without prior notice</li>
+                                    <li>Actual interest rates may vary depending on deposit date</li>
+                                    <li>Early withdrawal may result in reduced interest rates</li>
+                                    <li>Taxes may apply to the interest earned</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .calculator-page {
+            background-color: #f8f9fa;
+        }
+        
+        .rounded-4 {
+            border-radius: 0.75rem !important;
+        }
+        
+        .form-control, .form-select, .input-group-text {
+            border: 1px solid #dee2e6;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <style>
+        .hero-section {
+          background: linear-gradient(135deg, #4f46e5, #06b6d4);
+          padding: 3rem 1.5rem;
+          border-radius: 1rem;
+          color: white;
+        }
+
+        .hero-section h1 {
+          color: #ffffff;
+        }
+
+        .hero-section p {
+          color: rgba(255,255,255,0.85);
+        }
+
+        .card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 1rem 2rem rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+          border-radius: 0.75rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Format input tiền tệ
+        $(document).ready(function () {
+            // Format initial value if exists
+            formatCurrencyInput($('.money-input'));
+            
+            $('.money-input').on('input', function () {
+                formatCurrencyInput($(this));
+            });
+
+            $('form').on('submit', function () {
+                $('.money-input').each(function () {
+                    $(this).val($(this).val().replace(/\D/g, ''));
+                });
+            });
+            
+            // Add animation to results card if exists
+            if ($('.result-summary').length) {
+                $('.result-summary').addClass('animate__animated animate__fadeIn');
+            }
+        });
+        
+        function formatCurrencyInput(input) {
+            let value = input.val().replace(/\D/g, '');
+            input.val(new Intl.NumberFormat('vi-VN').format(value));
+        }
+    </script>
+}

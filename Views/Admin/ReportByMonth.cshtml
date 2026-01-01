@@ -1,0 +1,123 @@
+@model QuanLySoTietKiem.Entity.BaoCaoThang
+@{
+  ViewData["Title"] = "Báo Cáo Tháng";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">
+        <i class="bi bi-file-text me-2"></i>
+        Báo Cáo Tháng
+      </h3>
+    </div>
+    <div class="card-body">
+      <form method="post" class="mb-4">
+        <div class="row align-items-end">
+          <div class="col-md-3">
+            <label class="form-label">Tháng:</label>
+            <select name="month" class="form-select" required>
+              @for (int i = 1; i <= 12; i++)
+              {
+                <option value="@i" selected="@(Model?.Thang == i)">@i</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Năm:</label>
+            <select name="year" class="form-select" required>
+              @for (int i = DateTime.Now.Year - 5; i <= DateTime.Now.Year; i++)
+              {
+                <option value="@i" selected="@(Model?.Nam == i)">@i</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-search me-2"></i>Xem báo cáo
+            </button>
+          </div>
+        </div>
+      </form>
+
+      @if (Model != null)
+      {
+        <div class="dropdown mb-3">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Xuất Báo Cáo
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+            <li>
+              <form asp-action="ExportMonthlyReportToPdf" method="post">
+                <input type="hidden" name="month" value="@Model.Thang" />
+                <input type="hidden" name="year" value="@Model.Nam" />
+                <button type="submit" class="dropdown-item">
+                  <i class="bi bi-file-pdf me-2"></i>Xuất PDF
+                </button>
+              </form>
+            </li>
+          </ul>
+        </div>
+
+        <div class="alert alert-info">
+          <h5>Báo cáo tháng @Model.Thang/@Model.Nam</h5>
+          <p class="mb-0">Thời điểm tạo báo cáo: @Model.NgayTaoBaoCao.ToString("dd/MM/yyyy HH:mm:ss")</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="card bg-success text-white">
+              <div class="card-body">
+                <h5 class="card-title">Tổng tiền gửi</h5>
+                <p class="display-6">@Model.TongTienGui.ToString("N0") VNĐ</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="card bg-secondary text-white">
+              <div class="card-body">
+                <h5 class="card-title">Tổng tiền rút</h5>
+                <p class="display-6">@Model.TongTienRut.ToString("N0") VNĐ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Số lượng sổ mở mới</h5>
+                <p class="display-6">@Model.SoLuongMo</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Số lượng sổ đóng</h5>
+                <p class="display-6">@Model.SoLuongDong</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Thống kê</h5>
+            <p>Chênh lệch: <strong>@Model.ChenhLech.ToString("N0") VNĐ</strong></p>
+          </div>
+        </div>
+      }
+      else
+      {
+        <div class="alert alert-warning">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Không có dữ liệu báo cáo cho tháng được chọn
+        </div>
+      }
+    </div>
+  </div>
+</div>

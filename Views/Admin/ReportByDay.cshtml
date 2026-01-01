@@ -1,0 +1,100 @@
+@model QuanLySoTietKiem.Entity.BaoCaoNgay
+@{
+  ViewData["Title"] = "Báo Cáo Ngày";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@if (Model != null)
+{
+            <div class="mt-4 mb-4">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Xuất Báo Cáo
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                        <li>
+                            <form asp-action="ExportToPdf" method="post">
+                                <input type="hidden" name="date" value="@Model.Ngay.ToString("yyyy-MM-dd")" />
+                                <button type="submit" class="dropdown-item">
+                                    <i class="bi bi-file-pdf me-2"></i>Xuất PDF
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-action="ExportToExcel" method="post">
+                                <input type="hidden" name="date" value="@Model.Ngay.ToString("yyyy-MM-dd")" />
+                                <button type="submit" class="dropdown-item">
+                                    <i class="bi bi-file-excel me-2"></i>Xuất Excel
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">
+                <i class="bi bi-file-text me-2"></i>
+                Báo Cáo Ngày
+            </h3>
+        </div>
+        <div class="card-body">
+            <form method="post" class="mb-4">
+                <div class="row align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label">Chọn ngày:</label>
+                        <input type="date" name="date" class="form-control" 
+                               value="@(Model?.Ngay.ToString("yyyy-MM-dd") ?? DateTime.Today.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search me-2"></i>Xem báo cáo
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+      @if (Model != null)
+      {
+                            <div class="alert alert-info">
+                                <h5>Báo cáo ngày: @Model.Ngay.ToString("dd/MM/yyyy")</h5>
+                                <p class="mb-0">Thời điểm tạo báo cáo: @Model.NgayTaoBaoCao.ToString("dd/MM/yyyy HH:mm:ss")</p>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card bg-success text-white">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Tổng tiền gửi</h5>
+                                            <p class="display-6">@Model.TongTienGui.ToString("N0") VNĐ</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                      <div class="card bg-secondary  text-white">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Tổng tiền rút</h5>
+                                            <p class="display-6">@Model.TongTienRut.ToString("N0") VNĐ</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Thống kê</h5>
+                                    <p>Chênh lệch: <strong>@((Model.TongTienGui - Model.TongTienRut).ToString("N0")) VNĐ</strong></p>
+                                </div>
+                            </div>
+      }
+      else
+      {
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                Không có dữ liệu báo cáo cho ngày được chọn
+                            </div>
+      }
+        </div>
+    </div>
+</div>

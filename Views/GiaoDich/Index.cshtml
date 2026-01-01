@@ -1,0 +1,51 @@
+@{
+  ViewData["Title"] = "Giao Dịch";
+  Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<h1 class="text-center">Giao Dịch</h1>
+
+<form method="post">
+  <div class="mb-3">
+    <label for="selectedAccountId" class="form-label">Chọn Sổ Tiết Kiệm:</label>
+    <select id="selectedAccountId" name="selectedAccountId" class="form-select" required>
+      <option value="">-- Chọn Sổ Tiết Kiệm --</option>
+      @foreach (var account in ViewBag.SavingsAccounts)
+      {
+        <option value="@account.Value">@account.Text</option>
+      }
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Xem Giao Dịch</button>
+</form>
+
+@if (ViewBag.Transactions != null && ViewBag.Transactions.Any())
+{
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Mã Giao Dịch</th>
+        <th>Ngày Giao Dịch</th>
+        <th>Số Tiền</th>
+        <th>Loại Giao Dịch</th>
+        <th>Mã sổ tiết kiệm</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var transaction in ViewBag.Transactions)
+      {
+        <tr>
+          <td>@transaction.MaGiaoDich</td>
+          <td>@transaction.NgayGiaoDich.ToString("dd/MM/yyyy")</td>
+          <td>@transaction.SoTien.ToString("N0") VNĐ</td>
+          <td>@(transaction.MaLoaiGiaoDich == 2 ? "Nạp tiền" : "Rút tiền")</td>
+          <td>@transaction.MaSoTietKiem</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else if (ViewBag.Transactions != null)
+{
+  <p class="text-center">Không có giao dịch nào cho sổ tiết kiệm này.</p>
+}

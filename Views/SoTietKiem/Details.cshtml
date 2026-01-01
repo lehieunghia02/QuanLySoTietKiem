@@ -1,0 +1,163 @@
+@model QuanLySoTietKiem.Models.SavingsAccount.SoTietKiemDetailModel
+@{
+  ViewData["Title"] = "Chi tiet so tiet kiem";
+  Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+ @* Trang chi tiet cua so tiet kiem *@
+<link rel="stylesheet" href="~/css/user/sotietkiem/chitietsotietkiem.css">
+  <div class="container mt-5 detail-container">
+            <div class="detail-card shadow-lg">
+              <div class="card-header-gradient">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-bank header-icon"></i>
+                  <div class="flex-grow-1">
+                    <h2 class="mb-1 fw-bold">Chi Tiết Sổ Tiết Kiệm</h2>
+                    <p class="mb-0 opacity-75">Thông tin chi tiết về sổ tiết kiệm của bạn</p>
+                  </div>
+                  <span class="account-id">Mã sổ: @Model.MaSoTietKiem</span>
+                </div>
+              </div>
+
+              <div class="info-section">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-person-circle"></i>Khách hàng
+                      </div>
+                      <div class="info-value">@Model.TenKhachHang</div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-cash"></i>Số Tiền Gửi Ban Đầu
+                      </div>
+                      <div class="info-value">
+                        <span class="money-value">@Model.SoTienGui.ToString("N0") VNĐ</span>
+                      </div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-wallet2"></i>Số Dư Hiện Tại
+                      </div>
+                      <div class="info-value">
+                        <span class="money-value">@Model.SoDuSoTietKiem.ToString("N0") VNĐ</span>
+                      </div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-calendar2"></i>Loại Sổ
+                      </div>
+                      <div class="info-value">
+                        @if (@Model.KyHan == 0)
+                        {
+                          <span>Không kỳ hạn</span>
+                        }
+                        else
+                        {
+                          <span>@Model.KyHan tháng</span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-cash-stack"></i>Số tiền thực hưởng nếu rút hôm nay
+                      </div>
+                      <div class="info-value">
+                        <span class="money-value">@Model.SoTienThucHuong.ToString("N0") VNĐ</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-arrow-repeat"></i>Hình Thức Đáo Hạn
+                      </div>
+                      <div class="info-value">@Model.TenHinhThucDenHan</div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-percent"></i>Lãi Suất Áp Dụng
+                      </div>
+                      <div class="info-value">
+                        <span class="interest-value">@Model.LaiSuatApDung.ToString("P1")</span>
+                      </div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-calendar-check"></i>Ngày Mở Sổ
+                      </div>
+                      <div class="info-value">@Model.NgayMoSo.ToString("dd/MM/yyyy")</div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-calendar-event"></i>Ngày Đáo Hạn
+                      </div>
+                      <div class="info-value">@Model.NgayDaoHan.ToString("dd/MM/yyyy")</div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-label">
+                        <i class="bi bi-circle-fill"></i>Trạng Thái
+                      </div>
+                      <div class="info-value">
+                        @if (Model.TrangThai)
+                        {
+                          <span class="badge status-active">
+                            <i class="bi bi-check-circle me-1"></i>Đang hoạt động
+                          </span>
+                        }
+                        else
+                        {
+                          <span class="badge status-inactive">
+                            <i class="bi bi-x-circle me-1"></i>Đã đóng
+                          </span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer-custom">
+                <div class="d-flex justify-content-between align-items-center">
+                  <a asp-action="Index" class="btn btn-action btn-back">
+                    <i class="bi bi-arrow-left me-2"></i>Quay Lại
+                  </a>
+                  @if (Model.TrangThai)
+                  {
+                    <div class="d-flex gap-2">
+                      <a asp-action="WithdrawMoney" asp-route-id="@Model.MaSoTietKiem" class="btn btn-action btn-withdraw">
+                        <i class="bi bi-cash-stack me-2"></i>Rút Tiền
+                      </a>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            @if (Model.TrangThai)
+            {
+              <div class="alert-custom">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-info-circle-fill me-3 fs-3 text-primary"></i>
+                  <div>
+                    <h5 class="mb-1">Lưu ý về việc rút tiền</h5>
+                    <p class="mb-0">Bạn có thể rút tiền bất kỳ lúc nào, nhưng sẽ được áp dụng lãi suất không kỳ hạn nếu rút trước
+                      ngày đáo hạn.</p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+@section Scripts {
+  <script src="~/js/User/SoTietKiem/ChiTietSoTietKiem.js"></script>
+}

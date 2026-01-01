@@ -1,0 +1,530 @@
+@{
+    ViewData["Title"] = "Trang quản trị";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Thống Kê Hệ Thống</h1>
+        <div>
+            <button type="button" class="btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#exportModal">
+                <i class="fas fa-download fa-sm text-white-50"></i> Xuất Báo Cáo
+            </button>
+        </div>
+    </div>
+
+    <!-- Date Range Filter -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Lọc Thời Gian</h6>
+        </div>
+        <div class="card-body">
+            <form method="get" action="@Url.Action("Dashboard", "Admin")" class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="fromDate" class="mr-2">Từ ngày:</label>
+                    <input type="date" class="form-control" id="fromDate" name="fromDate" value="@ViewBag.FromDate">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="toDate" class="mr-2">Đến ngày:</label>
+                    <input type="date" class="form-control" id="toDate" name="toDate" value="@ViewBag.ToDate">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Lọc</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Thẻ tổng quan -->
+    <div class="row">
+        <!-- Tổng số sổ đang hoạt động -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Tổng số sổ hiện có
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TongSoSoHienCo</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-book fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tổng giá trị tiền gửi -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Tổng giá trị tiền gửi
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @String.Format("{0:N0}", ViewBag.TongSoTienGui) VND
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tổng số sổ đã đóng -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Tổng số sổ đã đóng
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TongSoSoDaDong</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-book-dead fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tổng số sổ mở trong tháng -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Sổ mở trong tháng này
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TongSoMoTrongThang</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-plus fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thống kê biểu đồ -->
+    <div class="row">
+        <!-- Biểu đồ thống kê gửi và rút tiền -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Thống kê giao dịch theo tháng</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="transactionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thống kê theo loại sổ -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Phân bố theo loại sổ</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="accountTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sổ tiết kiệm sắp đáo hạn -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Sổ tiết kiệm sắp đáo hạn (7 ngày tới)</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Mã số</th>
+                            <th>Khách hàng</th>
+                            <th>Loại sổ</th>
+                            <th>Số tiền gửi</th>
+                            <th>Ngày mở sổ</th>
+                            <th>Ngày đáo hạn</th>
+                            <th>Còn lại</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.SoSapDaoHan != null)
+                        {
+                            @foreach (var so in ViewBag.SoSapDaoHan)
+                            {
+                                var conlai = (so.NgayDaoHan - DateTime.Now).Days;
+                                <tr class="@(conlai <= 2 ? "table-danger" : "table-warning")">
+                                    <td>@so.Code</td>
+                                    <td>@so.User.FullName</td>
+                                    <td>@so.LoaiSoTietKiem.TenLoaiSo</td>
+                                    <td>@String.Format("{0:N0}", so.SoTienGui) VND</td>
+                                    <td>@so.NgayMoSo.ToString("dd/MM/yyyy")</td>
+                                    <td>@so.NgayDaoHan.ToString("dd/MM/yyyy")</td>
+                                    <td>@conlai ngày</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center">Không có sổ nào sắp đáo hạn trong 7 ngày tới</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 10 khách hàng có số dư cao nhất -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Top 10 khách hàng có tổng giá trị gửi tiết kiệm cao nhất</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Họ tên</th>
+                            <th>Số lượng sổ</th>
+                            <th>Tổng giá trị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.TopUsers != null)
+                        {
+                            int stt = 1;
+                            @foreach (var user in ViewBag.TopUsers)
+                            {
+                                <tr>
+                                    <td>@stt</td>
+                                    <td>@user.Ten</td>
+                                    <td>@user.SoLuong</td>
+                                    <td>@String.Format("{0:N0}", user.TongTien) VND</td>
+                                </tr>
+                                stt++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Xuất báo cáo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label>Chọn dạng báo cáo:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportType" id="dailyReport" value="daily" checked>
+                            <label class="form-check-label" for="dailyReport">
+                                Báo cáo ngày
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportType" id="monthlyReport" value="monthly">
+                            <label class="form-check-label" for="monthlyReport">
+                                Báo cáo tháng
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily report form -->
+                <div id="dailyReportForm">
+                    <form id="exportDailyForm" method="post">
+                        <div class="form-group">
+                            <label for="dailyDate">Chọn ngày:</label>
+                            <input type="date" class="form-control" id="dailyDate" name="date"
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                        </div>
+                        <div class="form-group">
+                            <label>Định dạng:</label>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-primary active">
+                                    <input type="radio" name="fileType" id="pdfDaily" value="pdf" checked> PDF
+                                </label>
+                                <label class="btn btn-outline-success">
+                                    <input type="radio" name="fileType" id="excelDaily" value="excel"> Excel
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Monthly report form -->
+                <div id="monthlyReportForm" style="display: none;">
+                    <form id="exportMonthlyForm" method="post">
+                        <div class="form-group">
+                            <label for="month">Tháng:</label>
+                            <select class="form-control" id="month" name="month">
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    @if (i == DateTime.Now.Month)
+                                    {
+                                        <option value="@i" selected>Tháng @i</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@i">Tháng @i</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Năm:</label>
+                            <select class="form-control" id="year" name="year">
+                                @for (int i = DateTime.Now.Year; i >= DateTime.Now.Year - 5; i--)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Định dạng:</label>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-primary active">
+                                    <input type="radio" name="fileType" id="pdfMonthly" value="pdf" checked> PDF
+                                </label>
+                                <label class="btn btn-outline-success">
+                                    <input type="radio" name="fileType" id="excelMonthly" value="excel"> Excel
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="exportBtn">Xuất báo cáo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          // Line chart for transactions
+          var ctx = document.getElementById('transactionChart').getContext('2d');
+          var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+              datasets: [{
+                label: 'Tiền gửi',
+                data: @Json.Serialize(ViewBag.MonthlyDeposits),
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: 'rgb(75, 192, 192)',
+                pointBorderColor: '#fff',
+                pointHoverRadius: 6,
+                pointHoverBorderWidth: 3
+              },
+              {
+                label: 'Tiền rút',
+                data: @Json.Serialize(ViewBag.MonthlyWithdrawals),
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: 'rgb(255, 99, 132)',
+                pointBorderColor: '#fff',
+                pointHoverRadius: 6,
+                pointHoverBorderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              interaction: {
+                intersect: false,
+                mode: 'index'
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Biểu đồ thống kê tiền gửi và tiền rút theo tháng',
+                  font: {
+                    size: 16,
+                    weight: 'bold'
+                  },
+                  padding: 20
+                },
+                legend: {
+                  position: 'top',
+                  labels: {
+                    padding: 15,
+                    usePointStyle: true,
+                    pointStyle: 'circle'
+                  }
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  titleColor: '#000',
+                  titleFont: {
+                    size: 13
+                  },
+                  bodyColor: '#000',
+                  bodyFont: {
+                    size: 13
+                  },
+                  borderColor: '#ddd',
+                  borderWidth: 1,
+                  padding: 10,
+                  callbacks: {
+                    label: function (context) {
+                      return context.dataset.label + ': ' +
+                        context.parsed.y.toLocaleString('vi-VN') + ' VNĐ';
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  grid: {
+                    borderDash: [2, 4],
+                    color: '#eee'
+                  },
+                  ticks: {
+                    callback: function (value) {
+                      return value.toLocaleString('vi-VN') + ' VNĐ';
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+          // Pie chart for account types
+          var loaiSoList = ViewBag.ThongKeTheoLoai?.Select(t => t.LoaiSo).ToList();
+          var soLuongList = ViewBag.ThongKeTheoLoai?.Select(t => t.SoLuong).ToList();
+          var accountTypes = Html.Raw(Json.Serialize(loaiSoList));
+          var accountCounts = Html.Raw(Json.Serialize(soLuongList));
+
+          if (accountTypes && accountCounts) {
+            var ctxPie = document.getElementById('accountTypeChart').getContext('2d');
+            var colors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#5a5c69', '#f8f9fc', '#d1d3e2', '#b7b9cc'];
+
+            var myPieChart = new Chart(ctxPie, {
+              type: 'pie',
+              data: {
+                labels: accountTypes,
+                datasets: [{
+                  data: accountCounts,
+                  backgroundColor: colors.slice(0, accountTypes.length),
+                  hoverBackgroundColor: colors.slice(0, accountTypes.length),
+                  hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: 'right',
+                  },
+                  tooltip: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    padding: 10,
+                    displayColors: false,
+                    caretPadding: 10,
+                  },
+                },
+                cutout: '70%',
+                elements: {
+                  arc: {
+                    borderWidth: 1
+                  }
+                }
+              },
+            });
+          }
+
+          // Toggle report forms
+          $('input[name="reportType"]').change(function () {
+            if (this.value === 'daily') {
+              $('#dailyReportForm').show();
+              $('#monthlyReportForm').hide();
+            } else {
+              $('#dailyReportForm').hide();
+              $('#monthlyReportForm').show();
+            }
+          });
+
+          // Handle export button click
+          $('#exportBtn').click(function () {
+            var reportType = $('input[name="reportType"]:checked').val();
+            var fileType = reportType === 'daily'
+              ? $('input[name="fileType"]:checked', '#dailyReportForm').val()
+              : $('input[name="fileType"]:checked', '#monthlyReportForm').val();
+
+            if (reportType === 'daily') {
+              var date = $('#dailyDate').val();
+              if (fileType === 'pdf') {
+                window.location.href = '@Url.Action("ExportToPdf", "Admin")?date=' + date;
+              } else {
+                window.location.href = '@Url.Action("ExportToExcel", "Admin")?date=' + date;
+              }
+            } else {
+              var month = $('#month').val();
+              var year = $('#year').val();
+              if (fileType === 'pdf') {
+                window.location.href = '@Url.Action("ExportMonthlyReportToPdf", "Admin")?month=' + month + '&year=' + year;
+              } else {
+                window.location.href = '@Url.Action("ExportMonthlyReportToExcel", "Admin")?month=' + month + '&year=' + year;
+              }
+            }
+
+            $('#exportModal').modal('hide');
+          });
+        });
+    </script>
+}

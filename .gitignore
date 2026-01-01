@@ -1,0 +1,9 @@
+dotnet-sdk-9.0.100-preview.2.24157.14-linux-x64.tar.gz
+bin/
+obj/
+.vs/
+*.user
+*.suo
+appsettings.json
+appsettings.Production.json
+appsettings.Development.json

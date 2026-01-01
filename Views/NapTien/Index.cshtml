@@ -1,0 +1,329 @@
+@model QuanLySoTietKiem.Models.PaymentInformationModel
+
+@{
+  ViewData["Title"] = "Nạp tiền vào tài khoản";
+  Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+@section Styles {
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .payment-container {
+      padding: 3rem 0;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    }
+
+    .payment-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .payment-title {
+      color: #2c3e50;
+      font-weight: 700;
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .payment-title:after {
+      content: '';
+      position: absolute;
+      width: 70%;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      bottom: -10px;
+      left: 15%;
+      border-radius: 2px;
+    }
+
+    .payment-subtitle {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .payment-card {
+      border-radius: 15px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+      margin-bottom: 2rem;
+    }
+
+    .payment-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .payment-card-header {
+      padding: 1.5rem;
+      border-bottom: none;
+      position: relative;
+      overflow: hidden;
+      color: white;
+    }
+
+    .payment-card-body {
+      padding: 2rem;
+      background-color: white;
+    }
+
+    .payment-method-card {
+      border-radius: 10px;
+      border: 2px solid #e9ecef;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .payment-method-card:hover {
+      border-color: #3498db;
+      transform: translateY(-3px);
+    }
+
+    .payment-method-card.active {
+      border-color: #3498db;
+      background-color: #f8f9fa;
+    }
+
+    .payment-method-card .payment-logo {
+      height: 40px;
+      object-fit: contain;
+      margin-right: 1rem;
+    }
+
+    .payment-method-card .check-icon {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: #3498db;
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .payment-method-card.active .check-icon {
+      opacity: 1;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .balance-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .balance-amount {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .payment-btn {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 0.8rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .payment-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .payment-btn-paypal {
+      background: linear-gradient(135deg, #0070ba, #1546a0);
+    }
+
+    .payment-btn-vnpay {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+  </style>
+}
+
+<div class="payment-container">
+  <div class="container">
+    <div class="payment-header">
+      <h1 class="payment-title">Nạp Tiền Vào Tài Khoản</h1>
+      <p class="payment-subtitle">Nạp tiền vào tài khoản để sử dụng các dịch vụ của chúng tôi</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="payment-card">
+          <div class="payment-card-header" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+            <h3 class="mb-0"><i class="fas fa-credit-card me-2"></i>Thông Tin Thanh Toán</h3>
+          </div>
+          <div class="payment-card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">Chọn phương thức thanh toán</label>
+
+              <div class="payment-method-card active" id="paypal-method">
+                <div class="d-flex align-items-center">
+                  <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal"
+                    class="payment-logo">
+                  <div>
+                    <h5 class="mb-0">PayPal</h5>
+                    <p class="mb-0 text-muted small">Thanh toán an toàn qua PayPal</p>
+                  </div>
+                </div>
+                <i class="fas fa-check-circle check-icon"></i>
+              </div>
+
+              <div class="payment-method-card" id="vnpay-method">
+                <div class="d-flex align-items-center">
+                  <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR.png" alt="VNPay"
+                    class="payment-logo">
+                  <div>
+                    <h5 class="mb-0">VNPay</h5>
+                    <p class="mb-0 text-muted small">Thanh toán qua VNPay</p>
+                  </div>
+                </div>
+                <i class="fas fa-check-circle check-icon"></i>
+              </div>
+            </div>
+
+            <form id="payment-form" method="post">
+              <input type="hidden" id="selected-method" name="selectedMethod" value="paypal">
+
+              <!-- Tên khách hàng -->
+              <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label">Tên khách hàng</label>
+                <input asp-for="Name" class="form-control" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+              </div>
+
+              <!-- Số tiền -->
+              <div class="form-group mb-3">
+                <label asp-for="Amount" class="form-label">Số tiền (VNĐ)</label>
+                <input asp-for="Amount" type="number" class="form-control" min="10000" required />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+                <div class="form-text">Số tiền tối thiểu là 10,000 VNĐ</div>
+              </div>
+
+              <!-- Mô tả -->
+              <div class="form-group mb-3">
+                <label asp-for="OrderDescription" class="form-label">Nội dung thanh toán</label>
+                <textarea asp-for="OrderDescription" class="form-control" rows="2" required></textarea>
+                <span asp-validation-for="OrderDescription" class="text-danger"></span>
+              </div>
+
+              <input type="hidden" asp-for="OrderType" value="Deposit" />
+
+              <div class="d-flex justify-content-between mt-4">
+                <button type="button" id="back-btn" class="btn btn-outline-secondary">
+                  <i class="fas fa-arrow-left me-2"></i>Quay lại
+                </button>
+
+                <div>
+                  <button type="submit" id="paypal-btn" class="payment-btn payment-btn-paypal" asp-action="PayPal">
+                    <i class="fab fa-paypal me-2"></i>Thanh toán qua PayPal
+                  </button>
+
+                  <button type="submit" id="vnpay-btn" class="payment-btn payment-btn-vnpay d-none" asp-action="VNPay">
+                    <i class="fas fa-credit-card me-2"></i>Thanh toán qua VNPay
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="balance-card">
+          <h5 class="balance-title">Số dư hiện tại</h5>
+          <div class="balance-amount">@ViewBag.CurrentBalance.ToString("N0") VNĐ</div>
+        </div>
+
+        <div class="payment-card">
+          <div class="payment-card-header" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">
+            <h3 class="mb-0"><i class="fas fa-info-circle me-2"></i>Thông Tin</h3>
+          </div>
+          <div class="payment-card-body">
+            <div class="mb-3">
+              <h5><i class="fas fa-shield-alt text-primary me-2"></i>An toàn & Bảo mật</h5>
+              <p class="text-muted">Thông tin thanh toán của bạn được bảo mật tuyệt đối với công nghệ mã hóa hiện đại.
+              </p>
+            </div>
+
+            <div class="mb-3">
+              <h5><i class="fas fa-bolt text-warning me-2"></i>Nạp tiền tức thì</h5>
+              <p class="text-muted">Số dư tài khoản của bạn sẽ được cập nhật ngay sau khi thanh toán thành công.</p>
+            </div>
+
+            <div>
+              <h5><i class="fas fa-headset text-success me-2"></i>Hỗ trợ 24/7</h5>
+              <p class="text-muted">Đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giúp đỡ bạn mọi lúc.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+  }
+
+  <script>
+    $(document).ready(function () {
+      // Xử lý chọn phương thức thanh toán
+      $('.payment-method-card').click(function () {
+        $('.payment-method-card').removeClass('active');
+        $(this).addClass('active');
+
+        const method = $(this).attr('id');
+        $('#selected-method').val(method === 'paypal-method' ? 'paypal' : 'vnpay');
+
+        if (method === 'paypal-method') {
+          $('#paypal-btn').removeClass('d-none');
+          $('#vnpay-btn').addClass('d-none');
+        } else {
+          $('#paypal-btn').addClass('d-none');
+          $('#vnpay-btn').removeClass('d-none');
+        }
+      });
+
+      // Xử lý nút quay lại
+      $('#back-btn').click(function () {
+        window.history.back();
+      });
+
+      // Format số tiền khi nhập
+      $('#Amount').on('input', function () {
+        const amount = $(this).val();
+        if (amount && !isNaN(amount)) {
+          const formattedAmount = parseInt(amount).toLocaleString('vi-VN');
+          $('.amount-display').text(formattedAmount + ' VNĐ');
+        } else {
+          $('.amount-display').text('0 VNĐ');
+        }
+      });
+    });
+  </script>
+}

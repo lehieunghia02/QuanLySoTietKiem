@@ -1,0 +1,134 @@
+/* Edit Profile CSS - Specific styles for Edit Profile page */
+
+/* Import common profile styles */
+@import url('../profile/profile-common.css');
+
+/* Input group styling specific to edit profile */
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #28a745;
+  z-index: 10;
+}
+
+.input-with-icon {
+  padding-left: 45px;
+}
+
+/* Form validation styling */
+.field-validation-error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+}
+
+.input-validation-error {
+  border-color: #dc3545;
+}
+
+.input-validation-error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+  border-color: #dc3545;
+}
+
+/* Button container specific to edit profile */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Form animation */
+.profile-form .input-group {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.5s forwards;
+}
+
+.profile-form .input-group:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.profile-form .input-group:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.profile-form .input-group:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.profile-form .input-group:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive styles specific to edit profile */
+@media (max-width: 992px) {
+  .button-container {
+    margin-top: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .button-container {
+    flex-direction: column-reverse;
+  }
+  
+  .button-container .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .input-icon {
+    left: 12px;
+  }
+  
+  .input-with-icon {
+    padding-left: 40px;
+    font-size: 0.95rem;
+  }
+  
+  .button-container {
+    margin-top: 1rem;
+  }
+  
+  /* Adjust animation for small screens */
+  .profile-form .input-group {
+    animation-delay: 0.1s !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .input-icon {
+    color: #2fd672;
+  }
+  
+  .field-validation-error {
+    color: #ff6b6b;
+  }
+} 

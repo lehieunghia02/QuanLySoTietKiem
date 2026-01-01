@@ -1,0 +1,108 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using QuanLySoTietKiem.Constaints
+@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+@{
+    ViewData["Title"] = "Quản lý vai trò";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h4 class="m-0 font-weight-bold text-primary">Danh sách vai trò</h4>
+            <a asp-action="CreateRole" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i> Thêm vai trò mới
+            </a>
+        </div>
+        <div class="card-body">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="rolesTable" width="100%" cellspacing="0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên vai trò</th>
+                            <th>Thao tác</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var role in Model)
+                            {
+                                <tr>
+                                    <td>@role.Id</td>
+                                    <td>@role.Name</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </a>
+                                            @if (role.Name != RoleConstants.Admin)
+                                            {
+                                                <a asp-action="DeleteRole" asp-route-id="@role.Id"
+                                                    class="btn btn-danger btn-sm ms-1">
+                                                    <i class="fas fa-trash"></i> Xóa
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center">Không có quyền nào</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#rolesTable').DataTable({
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ vai trò mỗi trang",
+                    "zeroRecords": "Không tìm thấy vai trò nào",
+                    "info": "Hiển thị trang _PAGE_ của _PAGES_",
+                    "infoEmpty": "Không có vai trò nào",
+                    "infoFiltered": "(lọc từ _MAX_ vai trò)",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                }
+            });
+
+            // Tự động ẩn thông báo sau 5 giây
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 5000);
+        });
+    </script>
+}

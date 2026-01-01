@@ -1,0 +1,282 @@
+<style>
+    /* Header Styles */
+    .main-header {
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .main-header.scrolled {
+        padding: 0.25rem 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+        transform: scale(1.05);
+    }
+
+    .logo {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        transition: all 0.3s ease;
+    }
+
+    .logo:hover {
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    .brand-text {
+        font-weight: 700;
+        margin-left: 0.75rem;
+        color: #007bff;
+        font-size: 1.25rem;
+    }
+
+    .nav-item {
+        position: relative;
+        margin: 0 0.25rem;
+    }
+
+    .nav-link {
+        font-weight: 500;
+        padding: 0.5rem 1rem !important;
+        color: #495057;
+        transition: all 0.3s ease;
+        border-radius: 0.5rem;
+    }
+
+    .nav-link:hover {
+        color: #007bff;
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .btn-header {
+        border-radius: 0.5rem;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-login {
+        color: #007bff;
+        border: 1px solid #007bff;
+    }
+
+    .btn-login:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-register {
+        background: linear-gradient(45deg, #007bff, #00bcd4);
+        color: white;
+        border: none;
+    }
+
+    .btn-register:hover {
+        background: linear-gradient(45deg, #0069d9, #00a0b7);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    }
+
+    /* Dropdown Styles */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border-radius: 0.5rem;
+        padding: 0.75rem 0;
+        min-width: 12rem;
+    }
+
+    .dropdown-item {
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        color: #495057;
+        transition: all 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+        color: #007bff;
+        transform: translateX(5px);
+    }
+
+    .dropdown-divider {
+        margin: 0.5rem 0;
+        opacity: 0.1;
+    }
+
+    /* Animation for dropdown */
+    .animate {
+        animation-duration: 0.3s;
+        animation-fill-mode: both;
+    }
+    
+    .slideIn {
+        animation-name: slideIn;
+    }
+
+    /* User greeting styles */
+    .user-greeting {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(45deg, rgba(0, 123, 255, 0.1), rgba(0, 188, 212, 0.1));
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        margin-right: 1rem;
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #007bff, #00bcd4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 0.75rem;
+    }
+
+    .navbar-text {
+        color: #495057;
+        font-weight: 500;
+        margin: 0;
+    }
+</style>
+
+<header class="main-header">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                @* <img class="logo" *@
+                @*     src="https://res.cloudinary.com/dycwyt8jf/image/upload/v1740811913/picture_savings/logo_ukkeks.png" *@
+                @*     width="50px" height="50px" alt="Logo" /> *@
+                <span class="brand-text d-none d-sm-inline">Online Savings</span>
+            </a>
+
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Items -->
+            <div class="navbar-collapse collapse">
+                <!-- Left Nav Items (if needed) -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="LaiSuatDuKien" asp-action="TinhLaiSuat">
+                            <i class="bi bi-calculator me-1"></i>Interest Calculator
+                        </a>
+                    </li>'
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="TienIch" asp-action="SoSanhGoiTietKiem">
+                            <i class="bi bi-bar-chart-line me-1"></i>Compare Savings Plans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="TienIch" asp-action="LapKeHoachTietKiem">
+                            <i class="bi bi-calendar-check me-1"></i>Savings Planning
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="GioiThieu">
+                            <i class="bi bi-info-circle me-1"></i>About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="FinancialAdvisor" asp-action="Index">
+                            <i class="bi bi-chat-dots"></i> Financial Advisor
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Right Nav Items -->
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <div class="navbar-nav ms-auto d-flex align-items-center">
+                        <div class="user-greeting">
+                            <div class="user-avatar">
+                                @(User.Identity.Name != null && User.Identity.Name.Length > 0 ?
+                                                            User.Identity.Name[0].ToString().ToUpper() : "U")
+                        </div>
+                        <span class="navbar-text">Hello, @User.Identity.Name!</span>
+                    </div>
+                    <div class="nav-item">
+                        <form asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-header btn-login">
+                                <i class="bi bi-box-arrow-right me-1"></i>Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                                }
+                else
+                {
+                    <div class="navbar-nav ms-auto">
+                        <div class="nav-item">
+                            <a class="nav-link btn-header btn-login" asp-controller="Account" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                            </a>
+                        </div>
+
+                        <div class="nav-item dropdown">
+                            <a class="nav-link btn-header btn-register dropdown-toggle" href="#" id="navbarDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-plus me-1"></i>Account
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Register">
+                                        <i class="bi bi-person-plus me-2"></i>Register
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="ForgotPassword">
+                                        <i class="bi bi-key me-2"></i>Forgot password
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </nav>
+</header>
+
+<script>
+    // Add scrolled class to header on scroll
+    document.addEventListener('DOMContentLoaded', function () {
+        const header = document.querySelector('.main-header');
+
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    });
+</script>
