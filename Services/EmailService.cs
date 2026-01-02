@@ -15,15 +15,14 @@ public class EmailService : IEmailService
     private readonly IConfiguration _configuration;
     private readonly EmailSettings _emailSettings;
 
-    public EmailService(IConfiguration configuration, IOptions<EmailSettings> emailSettings)
+    public EmailService(IConfiguration configuration, 
+        IOptions<EmailSettings> emailSettings)
     {
         _configuration = configuration;
         _emailSettings = emailSettings.Value;
-
-        // Ensure email settings are properly initialized from appsettings.json
+        
         if (string.IsNullOrEmpty(_emailSettings.FromEmail))
         {
-            // Map from appsettings.json "EmailSettings" section
             _emailSettings.FromEmail = _configuration["EmailSettings:SenderEmail"] ?? string.Empty;
             _emailSettings.FromName = _configuration["EmailSettings:SenderName"] ?? string.Empty;
             _emailSettings.SmtpServer = _configuration["EmailSettings:SmtpServer"] ?? string.Empty;
@@ -38,7 +37,6 @@ public class EmailService : IEmailService
     {
         try
         {
-            // Create mail message
             var message = new MailMessage
             {
                 From = new MailAddress(_emailSettings.FromEmail, _emailSettings.FromName),
@@ -48,29 +46,19 @@ public class EmailService : IEmailService
             };
 
             message.To.Add(new MailAddress(toEmail));
-
-            // Configure SMTP client - Thứ tự thiết lập các thuộc tính rất quan trọng
+            
             using (var client = new SmtpClient())
             {
-                // 1. Thiết lập phương thức gửi
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-                // 2. Thiết lập UseDefaultCredentials = false TRƯỚC KHI thiết lập Credentials
                 client.UseDefaultCredentials = false;
-
-                // 3. Thiết lập thông tin máy chủ
                 client.Host = _emailSettings.SmtpServer;
                 client.Port = _emailSettings.SmtpPort;
                 client.EnableSsl = _emailSettings.EnableSsl;
-
-                // 4. Thiết lập thông tin đăng nhập
                 client.Credentials = new NetworkCredential(
                     _emailSettings.SmtpUsername,
                     _emailSettings.SmtpPassword
                 );
-                // 5. Thiết lập timeout
-                client.Timeout = 30000; // 30 seconds
-                // 6. Gửi email
+                client.Timeout = 30000;
                 await client.SendMailAsync(message);
             }
         }
@@ -85,24 +73,28 @@ public class EmailService : IEmailService
             throw new Exception($"Failed to send email: {ex.Message}", ex);
         }
     }
-    public async Task SendAccountOpeningNotificationAsync(string toEmail, Entity.SavingAccount soTietKiem)
+    //Case Open Saving Account 
+    public async Task SendAccountOpeningNotificationAsync(string toEmail, decimal totalAmount)
     {
         string subject = "Thông báo mở sổ tiết kiệm";
-        string body = $"Bạn đã mở sổ tiết kiệm với số tiền là {soTietKiem.SoTienGui} đồng.";
+        string body = $"Bạn đã mở sổ tiết kiệm với số tiền là {totalAmount} đồng.";
         await SendEmailAsync(toEmail, subject, body);
     }
+    //Case Close Saving Account
     public async Task SendAccountClosingNotificationAsync(string toEmail, Entity.SavingAccount soTietKiem, decimal totalAmount)
     {
         string subject = "Thông báo đóng sổ tiết kiệm";
         string body = $"Bạn đã đóng sổ tiết kiệm với số tiền là {totalAmount} đồng.";
         await SendEmailAsync(toEmail, subject, body);
     }
+    //Case Saving Account Maturity
     public async Task SendAccountMaturityNotificationAsync(string toEmail, Entity.SavingAccount soTietKiem)
     {
         string subject = "Thông báo sổ tiết kiệm sắp đến hạn";
         string body = $"Sổ tiết kiệm với số tiền là {soTietKiem.SoTienGui} đồng sắp đến hạn.";
         await SendEmailAsync(toEmail, subject, body);
     }
+    //Case Transaction Notification
     public async Task SendTransactionNotificationAsync(string toEmail, GiaoDich giaoDich)
     {
         string subject = "Thông báo giao dịch";

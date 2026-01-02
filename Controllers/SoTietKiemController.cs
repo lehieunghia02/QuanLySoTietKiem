@@ -192,18 +192,19 @@ namespace QuanLySoTietKiem.Controllers
 
                 await _context.SoTietKiems.AddAsync(soTietKiem);
                 await _context.SaveChangesAsync();
+                await _emailService.SendAccountOpeningNotificationAsync(currentUser.Email, model.SoTienGui);
                 return RedirectToAction(nameof(Index));
             }
 
-                ModelState.Values
+            ModelState.Values
                     .SelectMany(v => v.Errors)
                     .Select(e => e.ErrorMessage);
 
             await PopulateViewBagDropdowns();
             ViewBag.SoDuHienTai = currentUser.SoDuTaiKhoan;
             ViewBag.CodeSTK = model.Code;
-
-            await _emailService.SendEmailAsync(currentUser.Email, "Thông báo mở sổ tiết kiệm", "Bạn đã mở sổ tiết kiệm thành công");
+          
+            
             return View(model);
         }
         private string GenerateCode(string userId)

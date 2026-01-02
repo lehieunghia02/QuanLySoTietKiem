@@ -13,14 +13,20 @@ namespace QuanLySoTietKiem.Services
         private readonly ILogger<SavingAccountService> _logger;
         private readonly DapperContext _dapperContext;
         private readonly ISavingAccountRepository _soTietKiemRepository;
+        private readonly IEmailService _emailService; 
 
         public SavingAccountService(ApplicationDbContext context,
-            ILogger<SavingAccountService> logger, DapperContext dapperContext, ISavingAccountRepository soTietKiemRepository)
+            ILogger<SavingAccountService> logger, 
+            DapperContext dapperContext, 
+            ISavingAccountRepository soTietKiemRepository, 
+            IEmailService emailService)
         {
             _context = context;
             _logger = logger;
             _dapperContext = dapperContext;
             _soTietKiemRepository = soTietKiemRepository;
+            _emailService = emailService;
+
         }
 
         public async Task<int> GetCountSavingAccount(string userId)
