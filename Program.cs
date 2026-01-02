@@ -60,7 +60,6 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ILaiSuatDuKienService, LaiSuatDuKienService>();
 builder.Services.AddScoped<ITienIchService, TienIchService>();
 builder.Services.AddScoped<IAutoUpdateMoneyService, AutoUpdateMoneyServiceImplementation>();
-builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 builder.Services.AddScoped<IPayPalService, PayPalService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -131,7 +130,6 @@ builder.Services.Configure<EmailSettings>(options =>
     Console.WriteLine($"EnableSsl: {options.EnableSsl}");
 });
 
-builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
 #endregion
 
