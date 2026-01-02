@@ -19,5 +19,5 @@ jobs:
 
       - name: Build & Push Image
         run: |
-          docker build -t lehieunghia/quanlysotietkiem:latest .
-          docker push lehieunghia/quanlysotietkiem:latest
+          docker build -t hieunghiait/quanlysotietkiem:latest .
+          docker push hieunghiait/quanlysotietkiem:latest
