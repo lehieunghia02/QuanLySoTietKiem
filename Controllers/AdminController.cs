@@ -172,14 +172,25 @@ namespace QuanLySoTietKiem.Controllers
             return View();
         }
         /// <summary>
-        /// Quản lý người dùng
+        /// Get all customer
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> UserList()
         {
-            var users = await _userManager.GetUsersInRoleAsync(RoleConstants.User);
-            return View(users);
+            try
+            {
+                var users = await _userManager.GetUsersInRoleAsync(RoleConstants.User);
+                if (!users.Any())
+                {
+                    ViewBag.Message = "No users found";
+                }
+                return View(users);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching users: " + ex.Message);
+            }
         }
 
         /// <summary>

@@ -74,9 +74,7 @@ namespace QuanLySoTietKiem.Controllers
             ViewBag.SavingTypes = savingTypeStats.Select(s => s.Type).ToList();
             ViewBag.SavingTypeCounts = savingTypeStats.Select(s => s.Count).ToList();
             ViewBag.SavingTypeAmounts = savingTypeStats.Select(s => s.Amount).ToList();
-
-            // Thêm thông báo
-            ViewBag.ThongBao = "Chào mừng bạn Quay trở lại hệ thống";
+            ViewBag.ThongBao = "Welcome back to dashboard!";
             // Thêm thống kê tổng quan cho Polar Area Chart
             var totalStats = await _context.SoTietKiems
                 .Where(s => s.UserId == currentUser.Id)
@@ -103,13 +101,11 @@ namespace QuanLySoTietKiem.Controllers
                     CloseCount = g.Count(s => s.NgayDongSo != null && s.NgayDongSo.Value.Month == g.Key)
                 })
                 .ToListAsync();
-
-            // Chuẩn bị dữ liệu cho biểu đồ theo tháng
+            
             var months = Enumerable.Range(1, 12);
             var openData = months.Select(m => monthlyStats.FirstOrDefault(s => s.Month == m)?.OpenCount ?? 0).ToList();
             var closeData = months.Select(m => monthlyStats.FirstOrDefault(s => s.Month == m)?.CloseCount ?? 0).ToList();
-
-            // Thống kê theo ngày trong tháng hiện tại
+            
             var currentMonth = DateTime.Now.Month;
             var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
             var dailyStats = await _context.SoTietKiems
@@ -124,8 +120,7 @@ namespace QuanLySoTietKiem.Controllers
                     CloseCount = g.Count(s => s.NgayDongSo != null && s.NgayDongSo.Value.Day == g.Key)
                 })
                 .ToListAsync();
-
-            // Chuẩn bị dữ liệu cho biểu đồ theo ngày
+            
             var days = Enumerable.Range(1, daysInMonth);
             var dailyOpenData = days.Select(d => dailyStats.FirstOrDefault(s => s.Day == d)?.OpenCount ?? 0).ToList();
             var dailyCloseData = days.Select(d => dailyStats.FirstOrDefault(s => s.Day == d)?.CloseCount ?? 0).ToList();

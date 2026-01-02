@@ -1,19 +1,19 @@
 @model QuanLySoTietKiem.Entity.ApplicationUser
 @{
-  ViewData["Title"] = "Chi tiết người dùng";
-  Layout = "_AdminLayout";
+    ViewData["Title"] = "User Details";
+    Layout = "_AdminLayout";
 }
 
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h4 class="m-0 font-weight-bold text-primary">Chi tiết người dùng</h4>
+            <h4 class="m-0 font-weight-bold text-primary">User Details</h4>
             <div>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">
-                    <i class="fas fa-edit"></i> Chỉnh sửa
+                    <i class="fas fa-edit"></i> Edit
                 </a>
                 <a asp-action="UserList" class="btn btn-secondary btn-sm">
-                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                    <i class="fas fa-arrow-left"></i> Back to List
                 </a>
             </div>
         </div>
@@ -34,34 +34,34 @@
                 <div class="col-md-8">
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Thông tin cá nhân</h5>
+                            <h5 class="card-title mb-0">Personal Information</h5>
                         </div>
                         <div class="card-body">
                             <dl class="row">
-                                <dt class="col-sm-4">Họ và tên:</dt>
+                                <dt class="col-sm-4">Full Name:</dt>
                                 <dd class="col-sm-8">@Model.FullName</dd>
 
                                 <dt class="col-sm-4">Email:</dt>
                                 <dd class="col-sm-8">@Model.Email</dd>
 
-                                <dt class="col-sm-4">Số điện thoại:</dt>
+                                <dt class="col-sm-4">Phone Number:</dt>
                                 <dd class="col-sm-8">@Model.PhoneNumber</dd>
 
-                                <dt class="col-sm-4">CCCD/CMND:</dt>
+                                <dt class="col-sm-4">National ID:</dt>
                                 <dd class="col-sm-8">@Model.CCCD</dd>
 
                                 <dt class="col-sm-4">Địa chỉ:</dt>
                                 <dd class="col-sm-8">@Model.Address</dd>
 
-                                <dt class="col-sm-4">Số dư tài khoản:</dt>
-                                <dd class="col-sm-8">@Model.SoDuTaiKhoan.ToString("N0") VNĐ</dd>
+                                <dt class="col-sm-4">Account Balance:</dt>
+                                <dd class="col-sm-8">@Model.SoDuTaiKhoan.ToString("N0") VND</dd>
                             </dl>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Thông tin tài khoản</h5>
+                            <h5 class="card-title mb-0">Account Information</h5>
                         </div>
                         <div class="card-body">
                             <dl class="row">
@@ -75,23 +75,23 @@
                                 <dd class="col-sm-8">
                                     @if (Model.EmailConfirmed)
                                     {
-                                          <span class="badge bg-success">Đã xác thực</span>
+                                        <span class="badge bg-success">Verified</span>
                                     }
                                     else
                                     {
-                                          <span class="badge bg-warning">Chưa xác thực</span>
+                                        <span class="badge bg-warning">Not Verified</span>
                                     }
                                 </dd>
 
-                                <dt class="col-sm-4">Số điện thoại đã xác thực:</dt>
+                                <dt class="col-sm-4">Phone Number Confirmed:</dt>
                                 <dd class="col-sm-8">
                                     @if (Model.PhoneNumberConfirmed)
                                     {
-                                          <span class="badge bg-success">Đã xác thực</span>
+                                        <span class="badge bg-success">Verified</span>
                                     }
                                     else
                                     {
-                                          <span class="badge bg-warning">Chưa xác thực</span>
+                                        <span class="badge bg-warning">Not Verified</span>
                                     }
                                 </dd>
                             </dl>
