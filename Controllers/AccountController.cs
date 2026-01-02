@@ -203,38 +203,6 @@ namespace QuanLySoTietKiem.Controllers
         {
             return View();
         }
-        [HttpPost]
-        [Authorize(Policy = PolicyConstants.RequireAdminOrUser)]
-        public async Task<IActionResult> UpdateAvatar([FromForm] UpdateAvatarModel model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (userId == null)
-                {
-                    ModelState.AddModelError("", "Không tìm thấy tài khoản");
-                    return View(model);
-                }
-                var avatarUrl = await _accountService.UploadAvatarAsync(userId, model.AvatarImage);
-                if (avatarUrl == null)
-                {
-                    ModelState.AddModelError("", "Lỗi khi cập nhật ảnh đại diện");
-                    return View(model);
-                }
-                TempData["SuccessMessage"] = "Ảnh đại diện đã được cập nhật thành công";
-                return RedirectToAction("Profile", "User");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Lỗi khi cập nhật ảnh đại diện");
-                return View(model);
-            }
-        }
-
 
         [HttpGet]
         [AllowAnonymous]
