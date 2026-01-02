@@ -15,7 +15,7 @@
                 @*Render name *@
                 <h6 class="mb-0">@User.Identity?.Name</h6>
                 <div class="d-flex align-items-center">
-                    <small class="bg-primary text-white px-2 py-1 rounded-pill">Quản trị viên</small>
+                    <small class="bg-primary text-white px-2 py-1 rounded-pill">Administrator</small>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
         <li class="nav-item">
             <a asp-controller="Admin" asp-action="Dashboard" class="nav-link @(currentAction == "Dashboard" ? "active" : "")">
                 <i class="bi bi-speedometer2"></i>
-                <span>Thống kê</span>
+                <span>Dashboard</span>
             </a>
         </li>
 
@@ -37,7 +37,7 @@
                href="#reportCollapse" data-bs-toggle="collapse" role="button" aria-expanded="false"
                aria-controls="reportCollapse">
                 <i class="bi bi-file-earmark-text"></i>
-                <span>Báo cáo</span>
+                <span>Reports</span>
             </a>
             <div class="collapse @(ViewContext.RouteData.Values["Action"].ToString().Contains("Report") ? "show" : "")"
                  id="reportCollapse">
@@ -46,14 +46,14 @@
                         <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ReportByDay" ? "active" : "")"
                            asp-controller="Admin" asp-action="ReportByDay">
                             <i class="bi bi-calendar-day"></i>
-                            <span>Báo cáo ngày</span>
+                            <span>Daily Report</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ReportByMonth" ? "active" : "")"
                            asp-controller="Admin" asp-action="ReportByMonth">
                             <i class="bi bi-calendar-month"></i>
-                            <span>Báo cáo tháng</span>
+                            <span>Monthly Report</span>
                         </a>
                     </li>
                 </ul>
@@ -64,7 +64,7 @@
             <a asp-controller="Admin" asp-action="RoleManagement"
                class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "RoleManagement" ? "active" : "")">
                 <i class="bi bi-percent"></i>
-                <span>Thay đổi lãi xuất</span>
+                <span>Interest Rate Management</span>
             </a>
         </li>
 
@@ -73,7 +73,7 @@
             <a asp-controller="Admin" asp-action="UserList"
                class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "UserList" ? "active" : "")">
                 <i class="bi bi-people"></i>
-                <span>Quản lý người dùng</span>
+                <span>User Management</span>
             </a>
         </li>
 
@@ -83,7 +83,7 @@
             <a asp-controller="Admin" asp-action="RoleList"
                class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "RoleList" ? "active" : "")">
                 <i class="bi bi-person-badge"></i>
-                <span>Quản lý vai trò</span>
+                <span>Role Management</span>
             </a>
         </li>
 
@@ -92,14 +92,14 @@
             <a class="nav-link" href="#settingsCollapse" data-bs-toggle="collapse" role="button" aria-expanded="false"
                aria-controls="settingsCollapse">
                 <i class="bi bi-gear"></i>
-                <span>Cài đặt</span>
+                <span>Settings</span>
             </a>
             <div class="collapse" id="settingsCollapse">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="bi bi-sliders"></i>
-                            <span>Cấu hình hệ thống</span>
+                            <span>Security</span>
                         </a>
                     </li>
                     <li class="nav-item">
