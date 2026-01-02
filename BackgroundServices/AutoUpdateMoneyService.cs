@@ -25,7 +25,6 @@ namespace QuanLySoTietKiem.BackgroundServices
                 {
                     logger.LogError(ex, "Error in the auto update process");
                 }
-
                 await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
             }
         }
