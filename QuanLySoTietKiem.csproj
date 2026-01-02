@@ -45,4 +45,9 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\lehieunghia-002-site1 - FTP.pubxml" />
+    <None Remove="Properties\PublishProfiles\lehieunghia-002-site1 - Web Deploy.pubxml" />
+  </ItemGroup>
+
 </Project>
