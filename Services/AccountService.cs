@@ -17,7 +17,6 @@ namespace QuanLySoTietKiem.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private IEmailService _emailService;
-        private readonly ICloudinaryService _cloudinaryService;
         private readonly ILogger<AccountService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUrlHelper _urlHelper;
@@ -27,7 +26,6 @@ namespace QuanLySoTietKiem.Services
         public AccountService(
             UserManager<ApplicationUser> userManager,
             IEmailService emailService,
-            ICloudinaryService cloudinaryService,
             ILogger<AccountService> logger,
             IHttpContextAccessor httpContextAccessor,
             IUrlHelper urlHelper,
@@ -39,7 +37,6 @@ namespace QuanLySoTietKiem.Services
             _emailService = emailService;
             _urlHelper = urlHelper;
             _httpContextAccessor = httpContextAccessor;
-            _cloudinaryService = cloudinaryService;
             _logger = logger;
             _storageSettings = storageSettings.Value;
             _userRepository = userRepository;
@@ -162,32 +159,6 @@ namespace QuanLySoTietKiem.Services
             }
 
             return (false, MessageConstants.ModelRegister.RegisterFailed);
-        }
-        
-        public async Task<string> UploadAvatarAsync(string userId, IFormFile avatarImage)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null || avatarImage == null)
-                {
-                    throw new Exception("");
-                }
-                var imageUrl = await _cloudinaryService.UploadImageAsync(avatarImage);
-                user.AvatarUrl = imageUrl;
-                var result = await _userManager.UpdateAsync(user);
-                if (!result.Succeeded)
-                {
-                    throw new Exception("Failed to update user avatar");
-                }
-                return imageUrl;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error uploading avatar");
-                throw;
-            }
-
         }
     }
 }

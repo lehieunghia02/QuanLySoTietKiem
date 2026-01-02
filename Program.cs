@@ -119,15 +119,6 @@ builder.Services.Configure<EmailSettings>(options =>
     options.FromEmail = builder.Configuration["EmailSettings:SenderEmail"] ?? options.FromEmail;
     options.FromName = builder.Configuration["EmailSettings:SenderName"] ?? options.FromName;
     options.EnableSsl = bool.TryParse(builder.Configuration["EmailSettings:EnableSsl"], out bool enableSsl) ? enableSsl : options.EnableSsl;
-
-    // Log the configuration for debugging
-    Console.WriteLine($"Email Configuration:");
-    Console.WriteLine($"SmtpServer: {options.SmtpServer}");
-    Console.WriteLine($"SmtpPort: {options.SmtpPort}");
-    Console.WriteLine($"SmtpUsername: {options.SmtpUsername}");
-    Console.WriteLine($"FromEmail: {options.FromEmail}");
-    Console.WriteLine($"FromName: {options.FromName}");
-    Console.WriteLine($"EnableSsl: {options.EnableSsl}");
 });
 
 
