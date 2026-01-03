@@ -21,7 +21,6 @@ namespace QuanLySoTietKiem.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUrlHelper _urlHelper;
         private readonly IUserRepository _userRepository;
-        private readonly GoogleCloudStorageSettings _storageSettings; 
 
         public AccountService(
             UserManager<ApplicationUser> userManager,
@@ -29,8 +28,7 @@ namespace QuanLySoTietKiem.Services
             ILogger<AccountService> logger,
             IHttpContextAccessor httpContextAccessor,
             IUrlHelper urlHelper,
-            IUserRepository userRepository, 
-            IOptions<GoogleCloudStorageSettings> storageSettings
+            IUserRepository userRepository
             )
         {
             _userManager = userManager;
@@ -38,7 +36,6 @@ namespace QuanLySoTietKiem.Services
             _urlHelper = urlHelper;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
-            _storageSettings = storageSettings.Value;
             _userRepository = userRepository;
         }
 
