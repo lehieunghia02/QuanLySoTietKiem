@@ -224,14 +224,18 @@ namespace QuanLySoTietKiem.Controllers
         [HttpGet]
         public async Task<IActionResult> ReportByDay()
         {
-            // Get today's date at midnight
-            var today = DateTime.Today;
-
-            // Get all transactions for today
-            var report = await GenerateDailyReport(today);
-            return View(report);
+            try
+            {
+                var today = DateTime.Today;
+                var report = await GenerateDailyReport(today);
+                return View(report);
+            }
+            catch (Exception ex)
+            {
+               throw new Exception("Error fetching report: " + ex.Message);
+            }
         }
-
+ 
         [HttpPost]
         public async Task<IActionResult> ReportByDay(DateTime date)
         {
@@ -243,7 +247,6 @@ namespace QuanLySoTietKiem.Controllers
         {
             try
             {
-                // Get transactions for the specified date
                 var transactions = await _context.GiaoDichs
                     .Include(g => g.SoTietKiem)
                     .ThenInclude(s => s.LoaiSoTietKiem)
@@ -252,7 +255,7 @@ namespace QuanLySoTietKiem.Controllers
 
                 // Calculate totals
                 decimal tongTienGui = transactions
-                    .Where(t => t.MaLoaiGiaoDich == 2) // Mã 2 là giao dịch gửi tiền
+                    .Where(t => t.MaLoaiGiaoDich == 2)  // Mã 2 là giao dịch gửi tiền
                     .Sum(t => (decimal)t.SoTien);
 
                 decimal tongTienRut = transactions
@@ -266,7 +269,7 @@ namespace QuanLySoTietKiem.Controllers
                     TongTienGui = tongTienGui,
                     TongTienRut = tongTienRut,
                     NgayTaoBaoCao = DateTime.Now,
-                    MaLoaiSo = 1 // Mặc định là loại sổ 1, có thể điều chỉnh theo yêu cầu
+                    MaLoaiSo = 1 // Mặc định là loại sổ 1, có thể điều chỉnh theo yêu cầu   
                 };
 
                 return report;
