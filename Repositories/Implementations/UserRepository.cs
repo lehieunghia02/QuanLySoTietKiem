@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuanLySoTietKiem.Entity;
 using QuanLySoTietKiem.Repositories.Interfaces;
-using System.Threading.Tasks;
+
 
 namespace QuanLySoTietKiem.Repositories
 {
