@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using QuanLySoTietKiem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using QuanLySoTietKiem.Entity;
@@ -7,8 +6,6 @@ using ForgotPasswordModel = QuanLySoTietKiem.Models.AccountModels.ForgotPassword
 using QuanLySoTietKiem.Constaints;
 using QuanLySoTietKiem.Repositories.Interfaces;
 using RegisterModel = QuanLySoTietKiem.Models.AccountModels.RegisterModel.RegisterModel;
-using QuanLySoTietKiem.Configurations;
-using Microsoft.Extensions.Options;
 
 
 namespace QuanLySoTietKiem.Services

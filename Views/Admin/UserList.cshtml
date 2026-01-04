@@ -13,7 +13,7 @@
       </a>
     </div>  
     <div class="card-body">
-      <!-- Hiển thị thông báo -->
+      <!-- Show notification -->
       @if (TempData["SuccessMessage"] != null)
       {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -60,7 +60,7 @@
             </tr>
           </thead>
           <tbody>
-            @if (Model != null && Model.Any())
+            @if (Model.Any())
             {
               @foreach (var user in Model)
               {
@@ -125,8 +125,7 @@
           }
         }
       });
-
-      // Tự động ẩn thông báo sau 5 giây
+      // Auto-dismiss alerts after 5 seconds
       setTimeout(function () {
         $('.alert').alert('close');
       }, 5000);

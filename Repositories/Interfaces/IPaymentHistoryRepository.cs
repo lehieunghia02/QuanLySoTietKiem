@@ -7,6 +7,5 @@ namespace QuanLySoTietKiem.Repositories.Interfaces
     {
         Task<IEnumerable<PaymentHistoryModel>> GetAllPaymentHistoriesByUserIdAsync(string userId);
         Task<bool> AddPaymentHistoryAsync(PaymentHistory paymentHistory);
-
     }
 }

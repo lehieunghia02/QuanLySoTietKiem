@@ -1,4 +1,4 @@
-﻿using QuanLySoTietKiem.Entity;
+﻿    using QuanLySoTietKiem.Entity;
 
 namespace QuanLySoTietKiem.Repositories.Interfaces
 {
