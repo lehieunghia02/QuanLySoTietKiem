@@ -30,7 +30,7 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("VinaHostConnectionV2")));
-
+builder.Services.AddHealthChecks();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireLowercase = true;
@@ -205,7 +205,7 @@ else
     // Điều này giúp tránh lỗi SSL khi callback từ PayPal
     app.UseDeveloperExceptionPage();
 }
-
+app.MapHealthChecks("/health");
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
 app.UseRouting();
 
