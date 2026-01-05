@@ -1,7 +1,7 @@
 ﻿@using iTextSharp.text.pdf.qrcode
 @model QuanLySoTietKiem.Entity.ApplicationUser
 @{
-    ViewData["Title"] = "Trang cá nhân";
+    ViewData["Title"] = "User Profile";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 @*Link to css*@
@@ -54,8 +54,12 @@
                             </div>
                             @* Tên và email *@
                             <div class="text-center">
-                                <h2 class="mb-2">@Model.FullName</h2>
-                                <p class="mb-0 opacity-75">@Model.Email</p>
+                                <h2 class="mb-2">
+                                    @(string.IsNullOrEmpty(@Model.FullName) ? "User": @Model.FullName)
+                                </h2>
+                                <p class="mb-0 opacity-75">
+                                    @(string.IsNullOrEmpty(@Model.Email) ? "No Email": @Model.Email)
+                                </p>
                             </div>
 
                         </div>
@@ -66,10 +70,10 @@
                 <div class="card-footer bg-light p-4 text-center">
                     <div class="d-flex justify-content-center gap-3">
                         <a href="/User/EditProfile" class="btn btn-success btn-lg">
-                            <i class="bi bi-pencil-fill me-2"></i>Chỉnh sửa thông tin
+                            <i class="bi bi-pencil-fill me-2"></i>Edit profile
                         </a>
                         <a asp-action="Index" asp-controller="User" class="btn btn-outline-secondary btn-lg">
-                            <i class="bi bi-house-fill me-2"></i>Trở về trang chủ
+                            <i class="bi bi-house-fill me-2"></i>Back
                         </a>
                     </div>
                 </div>

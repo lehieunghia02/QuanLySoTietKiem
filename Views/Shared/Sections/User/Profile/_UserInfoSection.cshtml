@@ -2,9 +2,9 @@
   <!-- Thông tin tài khoản -->
   <div class="balance-card mb-4 animate__animated animate__fadeInUp">
     <div class="text-center">
-      <h5 class="mb-3 opacity-75">Số dư tài khoản</h5>
+      <h5 class="mb-3 opacity-75">Amount</h5>
       <h2 class="mb-0">@Model.SoDuTaiKhoan.ToString("C0", new
-        System.Globalization.CultureInfo("vi-VN"))</ h2 >
+        System.Globalization.CultureInfo("vi-VN"))</h2 >
     </div>
   </div>
 
@@ -13,7 +13,7 @@
     <div class="col-md-6">
       <div class="info-group animate__animated animate__fadeInLeft">
         <div class="info-label">
-          <i class="bi bi-person-badge me-2"></i>Căn cước công dân
+          <i class="bi bi-person-badge me-2"></i>National ID
         </div>
         <div class="info-value">@Model.CCCD</div>
       </div>
@@ -21,10 +21,10 @@
     <div class="col-md-6">
       <div class="info-group animate__animated animate__fadeInRight">
         <div class="info-label">
-          <i class="bi bi-telephone me-2"></i>Số điện thoại
+          <i class="bi bi-telephone me-2"></i>Phone Number
         </div>
                 <div class="info-value">
-                    @(Model.PhoneNumber ?? "Chưa cập nhật số điện thoại")
+                    @(Model.PhoneNumber ?? "No phone number provided")
                 </div>
       </div>
     </div>
@@ -34,17 +34,17 @@
     <div class="col-md-6">
       <div class="info-group animate__animated animate__fadeInLeft" style="animation-delay: 0.2s">
         <div class="info-label">
-          <i class="bi bi-geo-alt me-2"></i>Địa chỉ
+          <i class="bi bi-geo-alt me-2"></i>Address
         </div>
         <div class="info-value">
-                    @(Model.Address ?? "Chưa cập nhật địa chỉ")
+                    @(Model.Address ?? "No update address")
         </div>
       </div>
     </div>
     <div class="col-md-6">
       <div class="info-group animate__animated animate__fadeInRight" style="animation-delay: 0.2s">
         <div class="info-label">
-          <i class="bi bi-person me-2"></i>Tên đăng nhập
+          <i class="bi bi-person me-2"></i>User name
         </div>
         <div class="info-value">@Model.UserName</div>
       </div>

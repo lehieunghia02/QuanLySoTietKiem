@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLySoTietKiem.Constaints;
 using QuanLySoTietKiem.Entity;
-using QuanLySoTietKiem.Models;
 
 namespace QuanLySoTietKiem.Controllers
 {
@@ -30,8 +29,6 @@ namespace QuanLySoTietKiem.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
             var roles = await _roleManager.Roles.ToListAsync();
-
-            // Lấy danh sách role của mỗi user
             var userRoles = new Dictionary<string, IList<string>>();
             foreach (var user in users)
             {

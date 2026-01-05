@@ -230,19 +230,16 @@ namespace QuanLySoTietKiem.Controllers
             {
                 return View(model);
             }
-
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 return RedirectToAction("ResetPasswordConfirmation");
             }
-
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation");
             }
-
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
