@@ -6,9 +6,7 @@ using OpenAI;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
 using QuanLySoTietKiem.Data;
-using QuanLySoTietKiem.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+
 
 public class FinancialAdvisorService : IFinancialAdvisorService
 {
