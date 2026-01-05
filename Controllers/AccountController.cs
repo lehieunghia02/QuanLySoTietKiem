@@ -103,8 +103,11 @@ namespace QuanLySoTietKiem.Controllers
             ModelState.AddModelError(string.Empty, message);
             return View(model);
         }
-
-
+        
+        /// <summary>
+        /// Register account 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
@@ -130,7 +133,6 @@ namespace QuanLySoTietKiem.Controllers
                 TempData["SuccessMessage"] = message;
                 return RedirectToAction("Login", "Account");
             }
-
             ModelState.AddModelError(string.Empty, message);
             return View(registerModel);
         }
@@ -183,17 +185,20 @@ namespace QuanLySoTietKiem.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
-            if (ModelState.IsValid && !string.IsNullOrEmpty(model.Email))
+            if (!ModelState.IsValid)
             {
-                var result = await _accountService.ForgotPassword(model);
-                if (result)
-                {
-                    TempData["SuccessMessage"] = "Email đã được gửi đến bạn. Vui lòng kiểm tra email để đặt lại mật khẩu.";
-                    return View("Login");
-                }
-                ModelState.AddModelError("", "Email không tồn tại trong hệ thống.");
+                return View(model);
             }
-            return View(model);
+
+            if (string.IsNullOrWhiteSpace(model.Email))
+            {
+                ModelState.AddModelError(string.Empty, "Email address is required");
+                return View(model);
+            }
+            await _accountService.ForgotPassword(model);
+            TempData["SuccessMessage"] =
+                "If an account with that email exists, a password reset link has been sent. Please check your inbox.";
+            return RedirectToAction("Login", "Account");
         }
 
 

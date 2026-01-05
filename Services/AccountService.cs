@@ -111,7 +111,7 @@ namespace QuanLySoTietKiem.Services
                 PhoneNumberConfirmed = false,
                 EmailConfirmed = false,
                 LockoutEnabled = true,
-                AvatarUrl = "",
+                AvatarUrl = "", 
             };
 
             var result = await _userRepository.CreateAsync(user, registerModel.Password);
@@ -123,18 +123,18 @@ namespace QuanLySoTietKiem.Services
                 var token = await _userRepository.GenerateEmailConfirmationTokenAsync(user);
 
                 var confirmationLink =
-                    $"<a href='https://localhost:7149/Account/ConfirmEmail?userId={user.Id}&token={token}'>Confirm Email</a>";
+                    $"<a href='http://47.128.215.121/Account/ConfirmEmail?userId={user.Id}&token={token}'>Confirm Email</a>";
                 
                 try
                 {
                     await _emailService.SendEmailAsync(
                         user.Email,
-                        "Xác nhận tài khoản",
-                        $@"<h2>Xin chào {user.FullName},</h2>
-                        <p>Cảm ơn bạn đã đăng ký tài khoản tại hệ thống Quản Lý Sổ Tiết Kiệm.</p>
-                        <p>Vui lòng xác nhận email của bạn bằng cách {confirmationLink}.</p>
-                        <p>Nếu bạn không yêu cầu tạo tài khoản này, vui lòng bỏ qua email này.</p>
-                        <p>Trân trọng</p>"
+                        "Account Confirmation - Saving Account Management System",
+                        $@"<h2>Hello {user.FullName},</h2>
+                        <p>Thank you for registering an account with the Savings Account Management System.</p>
+                        <p>Please confirm your email address by clicking {confirmationLink}.</p>
+                        <p>If you did not request this account creation, please ignore this email.</p>
+                        <p>Best regards,</p>"
                     );
 
                     return (true, MessageConstants.ModelRegister.RegisterSuccess);
