@@ -5,22 +5,32 @@
 
 <div class="container my-4">
     <div class="row">
+        
         <div class="col-md-8 mx-auto">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white d-flex align-items-center">
                     <i class="bi bi-robot me-2 fs-4"></i>
-                    <h5 class="mb-0">Trợ lý thông minh</h5>
+                    <h5 class="mb-0">Smart Assistant</h5>
                 </div>
-                
-                <!-- Khu vực chat -->
+                <!-- Action button -->
+                <div class="d-flex justify-content-end gap-2 my-2">
+                    <button class="btn btn-sm btn-danger" onclick="clearChat()">
+                        <i class="bi bi-trash"></i> Clear history
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="exportChat()">
+                        <i class="bi bi-download"></i> Download chat history
+                    </button>
+                </div>
+
+                <!-- Chat area -->
                 <div class="card-body chat-area" id="chatArea">
                     <div class="welcome-message">
-                        <p class="fw-bold"><i class="bi bi-stars me-2"></i>Xin chào! Tôi là trợ lý thông minh. Tôi có thể giúp bạn:</p>
+                        <p class="fw-bold"><i class="bi bi-stars me-2"></i>Hello! I’m your smart assistant. I can help you with:</p>
                         <ul>
-                            <li>Hướng dẫn sử dụng website</li>
-                            <li>Tư vấn về sổ tiết kiệm</li>
-                            <li>Giải đáp thắc mắc về tính năng</li>
-                            <li>Hỗ trợ các vấn đề kỹ thuật</li>
+                            <li>Guidance on using the website</li>
+                            <li>Savings account consultation</li>
+                            <li>Feature-related questions</li>
+                            <li>Technical support</li>
                         </ul>
                     </div>
 
@@ -29,79 +39,70 @@
                         <div class="suggestions-container">
                             <div class="suggestions-category">
                                 <h6 class="suggestion-category-title">
-                                    <i class="bi bi-info-circle me-2"></i>Thông tin chung
+                                    <i class="bi bi-info-circle me-2"></i>General Information
                                 </h6>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Website này có những tính năng gì?
+                                        What features does this website offer?
                                     </button>
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Làm thế nào để bắt đầu sử dụng?
+                                        How do I get started?
                                     </button>
                                 </div>
                             </div>
 
                             <div class="suggestions-category">
                                 <h6 class="suggestion-category-title">
-                                    <i class="bi bi-wallet me-2"></i>Sổ tiết kiệm
+                                    <i class="bi bi-wallet me-2"></i>Savings Account
                                 </h6>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Cách mở sổ tiết kiệm mới?
+                                        How do I open a new savings account?
                                     </button>
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Làm sao để theo dõi lãi suất?
+                                        How can I track interest rates?
                                     </button>
                                 </div>
                             </div>
 
                             <div class="suggestions-category">
                                 <h6 class="suggestion-category-title">
-                                    <i class="bi bi-credit-card me-2"></i>Nạp/Rút tiền
+                                    <i class="bi bi-credit-card me-2"></i>Deposit / Withdrawal
                                 </h6>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Cách nạp tiền qua VNPay?
+                                        How to deposit money via VNPay?
                                     </button>
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Cách rút tiền về tài khoản?
+                                        How to withdraw money to my bank account?
                                     </button>
                                 </div>
                             </div>
 
                             <div class="suggestions-category">
                                 <h6 class="suggestion-category-title">
-                                    <i class="bi bi-shield-check me-2"></i>Bảo mật
+                                    <i class="bi bi-shield-check me-2"></i>Security
                                 </h6>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Cách bảo vệ tài khoản?
+                                        How can I protect my account?
                                     </button>
-                                    <button class="btn btn-outline-primary btn-sm suggestion-btn" 
+                                    <button class="btn btn-outline-primary btn-sm suggestion-btn"
                                             onclick="askSuggestion(this)">
-                                        Quên mật khẩu phải làm sao?
+                                        What should I do if I forget my password?
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Thêm các nút chức năng -->
-                    <div class="chat-actions">
-                        <button class="btn btn-outline-secondary btn-sm" onclick="clearChat()">
-                            <i class="bi bi-trash"></i> Xóa lịch sử
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm" onclick="exportChat()">
-                            <i class="bi bi-download"></i> Tải lịch sử chat
-                        </button>
-                    </div>
 
                     <!-- Thêm tính năng đánh giá câu trả lời -->
                     <div class="message-actions">
@@ -121,11 +122,11 @@
                             <span class="input-group-text bg-white">
                                 <i class="bi bi-chat-dots"></i>
                             </span>
-                            <input type="text" id="userInput" class="form-control border-start-0" 
-                                   placeholder="Nhập câu hỏi của bạn..." required>
+                            <input type="text" id="userInput" class="form-control border-start-0"
+                                   placeholder="Enter your question..." required>
                         </div>
                         <button type="submit" class="btn btn-primary d-flex align-items-center gap-2" id="sendButton">
-                            <span>Gửi</span>
+                            <span>Send</span>
                             <i class="bi bi-send"></i>
                         </button>
                     </form>
