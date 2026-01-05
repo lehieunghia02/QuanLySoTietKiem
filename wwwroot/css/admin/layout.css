@@ -255,17 +255,3 @@ body {
 .sidebar-overlay.active {
     display: block;
 }
-
-/* Utility classes */
-.btn-logout {
-    background-color: transparent;
-    color: #64748b;
-    border: 1px solid #e2e8f0;
-    padding: 0.5rem 1rem;
-    transition: all 0.2s ease;
-}
-
-    .btn-logout:hover {
-        background-color: #f8fafc;
-        color: #1e293b;
-    }
